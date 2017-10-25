@@ -94,6 +94,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Olá");
 			return false;
 		}
 	}
