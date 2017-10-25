@@ -25,6 +25,7 @@ public interface RMI_1 extends Remote{
 	
 	public boolean testeNCC(int ncc) throws RemoteException;
 	
+	
 	//Gerir departamentos
 	public boolean addDepartamento(String sigla, String nomeDepart, int id_dep, int id_fac)throws RemoteException;
 	public boolean removeDepartamento(int id_dep, int id_fac)throws RemoteException;
