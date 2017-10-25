@@ -73,12 +73,14 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	
 	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart){
 		try {
+			int id_faculd = nmtoidFaculd(no_faculd);
+			int id_depart = nmtoidDepart(no_depart);
 			Statement st = conn.createStatement();
 			//System.out.println("'"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd')), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', '"+id_depart+"')");
-			st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+no_faculd+"', '"+no_depart+"')");
+			st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', '"+id_depart+"')");
 			conn.commit();
 			return "type : register , ok : true";
-		} catch (SQLException e) {
+		} catch (SQLException | RemoteException e) {
 			e.printStackTrace();
 			return "type : register , ok : false";
 		}
@@ -793,7 +795,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 	*/
 	
-	public int nmtoidDepart(String nome_b)throws RemoteException {
+	private int nmtoidDepart(String nome_b)throws RemoteException {
 		int tempNum = 0;
 		try {
 			Statement st = conn.createStatement();
@@ -808,7 +810,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return tempNum;
 	}
 	
-	public int nmtoidFaculd(String nome_b)throws RemoteException {
+	private int nmtoidFaculd(String nome_b)throws RemoteException {
 		int tempNum = 0;
 		try {
 			Statement st = conn.createStatement();
