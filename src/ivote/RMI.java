@@ -33,6 +33,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			
 			try {
 				primario(portaRMI);
+				
 				rmi = (RMI_1) Naming.lookup("rmi://"+args[0]+":"+portaRMI+"/rmi");
 				System.out.println("Primário ligado!");
 			} catch (MalformedURLException e1) {
@@ -877,11 +878,5 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			e.printStackTrace();
 			return false;
 		}
-	}
-
-	@Override
-	public String addMembroMesaVoto(String mesaVoto, int nCC1, int nCC2, int nCC3) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
