@@ -115,7 +115,7 @@ public interface RMI_1 extends Remote{
 	public String getTipoP(int nCC)throws RemoteException;
 	public boolean setTipoP(int nCC, String n_tipo) throws RemoteException;
 	
-	public boolean getNome(int nCC)throws RemoteException;
+	public String getNome(int nCC)throws RemoteException;
 	public boolean setNome(int nCC, String n_nome) throws RemoteException;
 	
 	public boolean getPassword(int nCC)throws RemoteException;

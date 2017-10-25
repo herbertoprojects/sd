@@ -554,20 +554,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public boolean getNome(int nCC)throws RemoteException {
+	public String getNome(int nCC)throws RemoteException {
+		String n_nome = "";
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select nome from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
+			rs.next();
+			n_nome = rs.getString(1);
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return n_nome;
 	}
 	
 	public boolean setNome(int nCC, String n_nome) throws RemoteException {
