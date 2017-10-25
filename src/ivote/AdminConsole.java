@@ -38,12 +38,12 @@ public class AdminConsole extends UnicastRemoteObject{
 		while(true) {
 			System.out.println();
 			System.out.println("------------MAIN MENU-----------");
-			System.out.println("1- Gerir utilizador");//adicionar, remover, consultar
-			System.out.println("2- Gerir faculdades");//adicionar, remover, consultar
-			System.out.println("3- Gerir departamentos");//adicionar, remover, consultar
-			System.out.println("4- Gerir eleições");//criar eleição, adicionar listas, remover listas, consultar listas, consultar eleições, remover eleições
-			System.out.println("5- Dados de eleições (Real Time)");//escolher qual a eleição que está a correr e recebe eleições e começamos a receber as notificações
-			System.out.println("6- Voto antecipado");//autenticar a pessoa
+			System.out.println("1- Gerir utilizador");						//adicionar, remover, consultar
+			System.out.println("2- Gerir faculdades");						//adicionar, remover, consultar
+			System.out.println("3- Gerir departamentos");					//adicionar, remover, consultar
+			System.out.println("4- Gerir eleições");						//criar eleição, adicionar listas, remover listas, consultar listas, consultar eleições, remover eleições
+			System.out.println("5- Dados de eleições (Real Time)");			//escolher qual a eleição que está a correr e recebe eleições e começamos a receber as notificações
+			System.out.println("6- Voto antecipado");						//autenticar a pessoa
 			System.out.println("0- Sair");
 			
 			switch (leTeclado.pedeNumero("Opção: ", 0, 6)) {
@@ -99,7 +99,6 @@ public class AdminConsole extends UnicastRemoteObject{
 					leTeclado.leLinha("Continuar...");
 				break;
 			case 3:
-				System.out.println("jsddvhsv1");
 				if(!consultaUser()) {
 					System.out.println("Erro na consulta de utilizador!");			
 				}
@@ -114,16 +113,79 @@ public class AdminConsole extends UnicastRemoteObject{
 			System.out.println("1- Adicionar faculdade");
 			System.out.println("2- Remover faculdade");
 			System.out.println("3- Consultar faculdade");
-			System.out.println("Opção: ");
-			int option2 = leTeclado.pedeNumero("Opção: ", 0, 3);
+			System.out.println("0- Sair");
+			switch(leTeclado.pedeNumero("Opção: ", 0, 3)) {
+				
+			case 1:
+				if (criaFac()) {
+					System.out.println("Faculdade adicionada!");
+				}
+				else {
+					System.out.println("Erro na criação da faculdade!");
+				}
+				leTeclado.leLinha("Continuar...");
+				break;
+			case 2:
+				if(removeFac()) {
+					System.out.println("Faculdade removida!");		
+				}
+				else
+					System.out.println("Erro na remoção da faculdade");
+					leTeclado.leLinha("Continuar...");
+				break;
+			case 3:
+				if(!consultaFac()) {
+					System.out.println("Erro na consulta da faculdade!");			
+				}
+				leTeclado.leLinha("Continuar...");
+				break;
+				
+			case 0:
+				return;
+			
+			}
 	}
 	public void menuDep() {
 		System.out.println("------------Sub Menu dos Departamentos------------");
 		System.out.println("1- Adicionar departamento");
 		System.out.println("2- Remover departamento");
 		System.out.println("3- Consultar Departamento");
-		System.out.println("Opção: ");
-		int option3 = leTeclado.pedeNumero("Opção: ", 0, 3);
+		System.out.println("0- Sair");
+		
+		switch(leTeclado.pedeNumero("Opção: ", 0, 3)) {
+		
+			case 1:
+				if (criaDep()) {
+					System.out.println("Departamento adicionado!");
+				}
+				else {
+					System.out.println("Erro na criação do departamento!");
+				}
+				leTeclado.leLinha("Continuar...");
+				break;
+				
+			case 2:
+				if(removeDep()) {
+					System.out.println("Departamento removido!");		
+				}
+				else
+					System.out.println("Erro na remoção de departamento");
+					leTeclado.leLinha("Continuar...");
+				break;
+				
+			case 3:
+				if(!consultaDep()) {
+					System.out.println("Erro na consulta de departamento!");			
+				}
+				leTeclado.leLinha("Continuar...");
+				break;
+			
+			case 0:
+				return;
+			
+				
+		}
+		
 		
 	}
 	public void menuEleicoes() {
@@ -162,18 +224,18 @@ public class AdminConsole extends UnicastRemoteObject{
 		int nccTemp = leTeclado.pedeNumero("Número de cartão de cidadão: ", 9999999, 100000000);
 		try {
 			if (comunicacao.testeNCC(nccTemp)) {
-				//telefone
-				int telefoneTemp = leTeclado.pedeNumero("Contactos: ", 99999999, 1000000000);
-				//nome
-				String nomeTemp = leTeclado.leLinha("Nome: ");
-				//password
-				String passTemp = leTeclado.leLinha("Password: ");
-				//morada
-				String moradaTemp = leTeclado.leLinha("Morada: ");
-				//Data CC
-				String dataccTemp = leTeclado.pedeData("Data cartão cidadão: ");
-				//faculdade
-				String facTemp = pedeFac();
+				
+				int telefoneTemp = leTeclado.pedeNumero("Contactos: ", 99999999, 1000000000);		//telefone
+				
+				String nomeTemp = leTeclado.leLinha("Nome: ");										//nome
+				
+				String passTemp = leTeclado.leLinha("Password: ");									//password
+				
+				String moradaTemp = leTeclado.leLinha("Morada: ");									//morada
+				
+				String dataccTemp = leTeclado.pedeData("Data cartão cidadão: ");					//Data CC
+			
+				String facTemp = pedeFac();															//faculdade
 				String depTemp = pedeDep(facTemp);
 				String cargoTemp = "";
 				
@@ -181,6 +243,8 @@ public class AdminConsole extends UnicastRemoteObject{
 				System.out.println("1- Aluno");
 				System.out.println("2- Docente");
 				System.out.println("3- Funcionário");
+				
+				
 				switch(leTeclado.pedeNumero("Opção: ", 1, 3)) {
 				case 1: cargoTemp = "aluno";
 					break;
@@ -257,6 +321,7 @@ public class AdminConsole extends UnicastRemoteObject{
 
 	}
 	
+<<<<<<< HEAD
 	public String tipoEleicao() {
 		System.out.println("Escolha o tipo de eleição:");
 		System.out.println("1- Núcleo de Estudantes");
@@ -275,5 +340,49 @@ public class AdminConsole extends UnicastRemoteObject{
 		}
 		return "";
 	}
+=======
+	public boolean criaFac() {
+		
+		String nomeFaculd = leTeclado.leLinha("Nome da faculadade: ");
+		String sigla = leTeclado.leLinha("Sigla da faculdade: ");
+		int id = leTeclado.pedeNumero("Id da faculdade: ", 1000, 200000000);
+		System.out.println(id+ " "+sigla+" "+nomeFaculd);
+		System.out.println("1- Confirmar");
+		System.out.println("0- Cancelar");
+		
+		if(leTeclado.pedeNumero("Opção: ", 0, 1)== 1) {
+			try {
+				if(comunicacao.addFaculdade(sigla, nomeFaculd, id)) {
+					return true;
+				}
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}		
+		}
+		return false;
+	}
+
+	public boolean removeFac() {
+		
+		int idFac = leTeclado.pedeNumero("Introduza o id da faculdade: ", 1000, 20000000);
+		try {
+			if(comunicacao.removeFaculdade(idFac)) {
+				System.out.println("1- Confirmar");
+				System.out.println("0- Cancelar");
+				if(leTeclado.pedeNumero("Opção: ", 0, 1) == 1) {
+					if(comunicacao.removeFaculdade(idFac)) {
+						return true;
+					}										
+				}
+			}	
+		} catch (RemoteException e) {
+			e.printStackTrace();	
+		}	
+		return false;
+	}
+	
+	
+	
+>>>>>>> branch 'master' of https://github.com/herbertoprojects/sd
 	
 }
