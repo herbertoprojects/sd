@@ -263,6 +263,7 @@ public class AdminConsole extends UnicastRemoteObject{
 				}
 				else
 					System.out.println("Utilizador não encontrado");
+				
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}			
