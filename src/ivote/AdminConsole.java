@@ -145,6 +145,11 @@ public class AdminConsole extends UnicastRemoteObject{
 			
 			}
 	}
+	private boolean consultaFac() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	public void menuDep() {
 		System.out.println("------------Sub Menu dos Departamentos------------");
 		System.out.println("1- Adicionar departamento");
@@ -188,6 +193,21 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 		
 	}
+	private boolean consultaDep() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean removeDep() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean criaDep() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	public void menuEleicoes() {
 		System.out.println("------------Sub Menu das Eleições------------");
 		System.out.println("1- Criar eleição");
@@ -362,17 +382,17 @@ public class AdminConsole extends UnicastRemoteObject{
 
 	public boolean removeFac() {
 		
-		int idFac = leTeclado.pedeNumero("Introduza o id da faculdade: ", 1000, 20000000);
+		int idFac =0;
 		try {
-			if(comunicacao.removeFaculdade(idFac)) {
-				System.out.println("1- Confirmar");
-				System.out.println("0- Cancelar");
-				if(leTeclado.pedeNumero("Opção: ", 0, 1) == 1) {
-					if(comunicacao.removeFaculdade(idFac)) {
-						return true;
-					}										
-				}
-			}	
+			for(String temp:comunicacao.ListFaculdades()) {
+				System.out.println(temp);				
+			}
+			do {
+				idFac = leTeclado.pedeNumero("Introduza o id da faculdade (0- Cancelar): ", 0, 2000000);
+				
+			}
+			while (!comunicacao.removeFaculdade(idFac) || idFac == 0);
+				
 		} catch (RemoteException e) {
 			e.printStackTrace();	
 		}	
