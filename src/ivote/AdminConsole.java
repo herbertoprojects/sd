@@ -240,9 +240,20 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	public boolean consultaUser() {
-		System.out.println("1- procurar por ");
-		System.out.println(1);
-		System.out.println(1);
+		System.out.println("1- procurar por ncc ");
+		System.out.println("2- procurar por nome");
+		System.out.println("3- procurar por contacto");
+		System.out.println("0- sair");
+		switch (leTeclado.pedeNumero("Opção: ", 0, 3)) {
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 0:
+				break;
+		}
 		return true;
 	}
 	
