@@ -878,10 +878,4 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return false;
 		}
 	}
-
-	@Override
-	public String addMembroMesaVoto(String mesaVoto, int nCC1, int nCC2, int nCC3) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
