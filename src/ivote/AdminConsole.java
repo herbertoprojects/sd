@@ -55,6 +55,7 @@ public class AdminConsole extends UnicastRemoteObject{
 			switch (leTeclado.pedeNumero("Opção: ", 0, 6)) {
 				case 1:
 					menuUtil();
+					
 					break;
 				case 2:
 					break;
