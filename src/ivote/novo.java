@@ -1,5 +1,5 @@
 package ivote;
 
-public class Teste {
+public class novo {
 
 }
