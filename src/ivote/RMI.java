@@ -102,7 +102,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return faculdades;
 	}
 	
-	
 	public ArrayList <String> ListDepartamentos(int id_faculd) throws RemoteException {
 		ArrayList<String> departamentos = new ArrayList<String>();
 		try {
@@ -143,7 +142,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	
 	public boolean addFaculdade(String sigla, String nomeFaculd, int id)throws RemoteException {
 		try {
 			Statement st = conn.createStatement();
@@ -167,7 +165,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return false;
 		}
 	}
-	
 	
 	public String criaEleicao(String tipo, String inicio, String fim, String titulo, String descricao, int id) throws RemoteException {
 		try {
@@ -213,7 +210,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return eleicoes;
 	}
 	
-	
 	public String addListaCandidatos(int id, int id_eleicao, String membro1, String membro2, String membro3, String membro4, String membro5) throws RemoteException {
 		try {
 			Statement st = conn.createStatement();
@@ -226,7 +222,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-
 	public boolean removeListaCandidatos(int id_LC) throws RemoteException {
 		try {
 			Statement st = conn.createStatement();
@@ -505,20 +500,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 	*/
 	
-	public boolean getNCC (String nome_p,int telefone_p) throws RemoteException {
+	public int getNCC (String nome_p,int telefone_p) throws RemoteException {
+		int numCC = 0;
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select numeroCc from pessoa where nome = ('"+nome_p+"') and telefone = ('"+telefone_p+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getInt(1)));
-			}
+			rs.next();
+			numCC = rs.getInt(1);
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return numCC;
 	}
 	
 	public boolean setNCC(int nCC, int novoNCC) throws RemoteException {
@@ -533,20 +527,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public boolean getTipoP(int nCC)throws RemoteException {
+	public String getTipoP(int nCC)throws RemoteException {
+		String tipo = "";
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select tipo from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
+			rs.next();
+			tipo = rs.getString(1);
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return tipo;
 	}
 	
 	public boolean setTipoP(int nCC, String n_tipo) throws RemoteException {
@@ -825,7 +818,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return tempNum;
 	}
 
-	
 	public boolean testeNCC(int ncc) throws RemoteException {
 		int contador = 0;
 		try {
