@@ -51,7 +51,41 @@ public class getScanner {
 		String data = String.format("%2.0n %4.0n", mesTemp, anoTemp); 
 		return data;
 		
-	}	
+	}
+	
+	public int pedeDia(String texto, int mes) {
+		int diaTemp;
+		while(true) {
+			diaTemp = pedeNumero(texto, 1, 31);
+			switch (mes){
+			case 2:
+				if(diaTemp>29) {System.out.println("Dia invalido");}else {return diaTemp;}
+				break;
+			case 4:
+			case 6:
+			case 9:
+			case 11:
+				if(diaTemp>30) {System.out.println("Dia invalido");}else {return diaTemp;}
+				break;
+			default:
+				break;
+				
+			}
+		}
+	}
+	
+	public String pedeDataHora(String texto) {
+		System.out.println(texto);
+		
+		int anoTemp = pedeNumero("Ano: ", 1900,2200);
+		int mesTemp = pedeNumero("Mês: ", 1, 12);
+		int diaTemp = pedeDia("Dia: ",mesTemp);
+		
+		int horaTem = pedeNumero("Horas: ",0,23);
+		int minTemp = pedeNumero("Minutos: ",0,59);
+		
+		return String.format("%4.0n/%2.0n/%2.0n %2.0n:%2.0n", anoTemp,mesTemp,diaTemp,horaTem,minTemp);
+	}
 	
 	
 }
