@@ -84,7 +84,10 @@ public class AdminConsole extends UnicastRemoteObject{
 							
 							break;
 						case 3:
-							System.out.println(1);
+							if(!consultaUser()) {
+								System.out.println("Erro na consulta de utilizador!");
+							}
+
 							option = sc.nextInt();
 						break;
 					}
@@ -246,5 +249,22 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 	}
 	
-
+	public boolean consultaUser() {
+		System.out.println("1- Procurar por númeo cartão de cidadão");
+		System.out.println("2- Procurar por nome");
+		System.out.println("3- Procurar por contacto");
+		System.out.println("0- Sair");
+		switch (leTeclado.pedeNumero("Opção: ", 0, 3)) {
+			case 1: 
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 0:
+				break;
+		}
+		return true;
+	}
+	
 }
