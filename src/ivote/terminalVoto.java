@@ -16,6 +16,7 @@ public class terminalVoto {
 	public String nome;
 	public String password;
 	
+	
 	public terminalVoto (RMIRemoteInterface comunicacao,String nome,String password){
 		
 		this.comunicacao = comunicacao;
