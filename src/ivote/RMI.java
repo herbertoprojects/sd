@@ -756,24 +756,32 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 
-	
 	public String addMembrosMesaVoto(int mesaVoto, int nCC1, int nCC2, int nCC3) throws RemoteException {
 		try {
 			PreparedStatement st = conn.prepareStatement("UPDATE mesavoto SET id_pessoa1 = '"+nCC1+"', id_pessoa2 = '"+nCC2+"', id_pessoa3 = '"+nCC3+"' WHERE id = '"+mesaVoto+"'");
 			st.executeUpdate();
 			conn.commit();
-			return "type : add_MemberVoteTable , ok : true";
+			return "type : add_MembersVoteTable , ok : true";
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return "type : add_MemberVoteTable , ok : false";
+			return "type : add_MembersVoteTable , ok : false";
+		}
+	}
+	
+	
+	public String removeMembroMesaVoto(int mesaVoto) throws RemoteException {
+		try {
+			PreparedStatement st = conn.prepareStatement("UPDATE mesavoto SET id_pessoa1 = '"+null+"', id_pessoa2 = '"+null+"', id_pessoa3 = '"+null+"' WHERE id = '"+mesaVoto+"'");
+			st.executeUpdate();
+			conn.commit();
+			return "type : remove_MembersVoteTable , ok : true";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "type : remove_MembersVoteTable , ok : false";
 		}
 	}
 	
 	/*
-	public boolean removeMembroMesaVoto(String mesaVoto,int nCC) throws RemoteException {
-		
-	}
-	
 	public ArrayList <String> listaMembrosMesaVoto(String mesaVoto) throws RemoteException {
 		
 	}
@@ -853,5 +861,11 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public String addMembroMesaVoto(String mesaVoto, int nCC1, int nCC2, int nCC3) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
