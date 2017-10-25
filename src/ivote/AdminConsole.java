@@ -20,6 +20,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		super();
 		leTeclado = new getScanner();
 	}
+	
 	public static void main(String[] args){
 		AdminConsole consola = null;
 		try {
@@ -33,166 +34,109 @@ public class AdminConsole extends UnicastRemoteObject{
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			//e.printStackTrace();
 		}*/
-		while(true) {
-			consola.menu();
-		}
+		
+		consola.menuInicial();
 		
 
 	}
-	public void menu() {
-		System.out.println("------------MAIN MENU-----------");
-		
-		System.out.println("1- Gerir utilizador");
-		//adicionar, remover, consultar
-		System.out.println("2- Gerir faculdades");
-		//adicionar, remover, consultar
-		System.out.println("3- Gerir departamentos");
-		//adicionar, remover, consultar
-		System.out.println("4- Gerir eleições");
-		//criar eleição, adicionar listas, remover listas, consultar listas, consultar eleições, remover eleições
-		System.out.println("5- Dados de eleições (Real Time)");
-		//escolher qual a eleição que está a correr e recebe eleições e começamos a receber as notificações
-		System.out.println("6- Voto antecipado");
-		//autenticar a pessoa
-		System.out.println("0- Sair");
-		Scanner sc = new Scanner(System.in);
-		
-		int option = leTeclado.pedeNumero("Opção: ", 0, 6);
-		
-		do {
-			switch(option) {
+	
+	public void menuInicial() {
+		while(true) {
+			System.out.println();
+			System.out.println("------------MAIN MENU-----------");
+			System.out.println("1- Gerir utilizador");//adicionar, remover, consultar
+			System.out.println("2- Gerir faculdades");//adicionar, remover, consultar
+			System.out.println("3- Gerir departamentos");//adicionar, remover, consultar
+			System.out.println("4- Gerir eleições");//criar eleição, adicionar listas, remover listas, consultar listas, consultar eleições, remover eleições
+			System.out.println("5- Dados de eleições (Real Time)");//escolher qual a eleição que está a correr e recebe eleições e começamos a receber as notificações
+			System.out.println("6- Voto antecipado");//autenticar a pessoa
+			System.out.println("0- Sair");
 			
-			case 1: System.out.println("------------Sub Menu do Utilizador------------");
-					System.out.println("1- Adicionar utilizador");
-					System.out.println("2- Remover utilizador");
-					System.out.println("3- Consultar utilizador");
-					option = leTeclado.pedeNumero("Opção: ", 0, 3);
-					
-					switch(option) {
-						case 1:
-							if (criaUser()) {
-								System.out.println("Utilzador adicionado!");
-							}
-							else {
-								System.out.println("Erro na criação de utilizador!");
-							}
-							leTeclado.leLinha("Continuar...");
-							break;
-						case 2:
-							if(removeUser()) {
-								System.out.println("Utilizador removido!");		
-							}
-							else
-								System.out.println("Erro na remoção do utilizador");
-								leTeclado.leLinha("Continuar...");
-							break;
-						case 3:
-							System.out.println("jsddvhsv1");
-							if(!consultaUser()) {
-								System.out.println("Erro na consulta de utilizador!");			
-							}
-							leTeclado.leLinha("Continuar...");
-							break;
-						
-					}
-			break;
-				
-			case 2: System.out.println("------------Sub Menu das Faculades------------");
-					System.out.println("1- Adicionar faculdade");
-					System.out.println("2- Remover faculdade");
-					System.out.println("3- Consultar faculdade");
-					System.out.println("Opção: ");
-					option = leTeclado.pedeNumero("Opção: ", 0, 3);
-					
-					switch (option) {
-						case 1:
-						case 2:
-						case 3:
-						option = sc.nextInt();
-						break;					
-					}
-			break;
-			
-			case 3: System.out.println("------------Sub Menu dos Departamentos------------");
-					System.out.println("1- Adicionar departamento");
-					System.out.println("2- Remover departamento");
-					System.out.println("3- Consultar Departamento");
-					System.out.println("Opção: ");
-					option = leTeclado.pedeNumero("Opção: ", 0, 3);
-					
-					switch (option) {
-						case 1:
-						case 2:
-						case 3:
-						option = sc.nextInt();
-						break;
-					}
-			break;
-			
-			case 4: System.out.println("------------Sub Menu das Eleições------------");
-					System.out.println("1- Criar eleição");
-					System.out.println("2- Adicionar listas");
-					System.out.println("3- Remover listas");
-					System.out.println("4- Consultar listas");
-					System.out.println("5- Remover eleições");
-					System.out.println("6- Consultar eleições");
-					option = leTeclado.pedeNumero("Opção: ", 0, 3);
-					
-					switch (option) {
-					
-						case 1:
-						case 2:
-						case 3:
-						case 4: 
-						case 5:
-						case 6:
-						option = sc.nextInt();
-						break;
-					}
-			break;
-			
-			case 5: System.out.println("------------Dados das eleições------------");
-					System.out.println("..........................................");
-					System.out.println("..........................................");
-					System.out.println("..........................................");
-					
-					
-					switch (option) {
-						
-						case 1:
-						case 2:
-						case 3:
-						option = sc.nextInt();
-						break;
-					}
-			break;
-			
-			case 6: System.out.println("------------Voto Antecipado------------");
-					System.out.println(".......................................");
-					System.out.println(".......................................");
-					System.out.println(".......................................");
-					option = sc.nextInt();
-					
-					switch (option) {
-						
-						case 1:
-						case 2:
-						case 3:
-						option = sc.nextInt();
-						break;
-					}
-			break;
-			
-			case 0: System.exit(0);
-				break;
-				
-			default: break;
-			
+			switch (leTeclado.pedeNumero("Opção: ", 0, 6)) {
+				case 1:
+					menuUtil();
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					break;
+				case 6:
+					break;
+				case 0:
+					return;
 			}
-			
-		} while (option != 0);
+		}
 	}
 	
+	public void menuUtil() {
+		System.out.println();
+		System.out.println("------------Sub Menu do Utilizador------------");
+		System.out.println("1- Adicionar utilizador");
+		System.out.println("2- Remover utilizador");
+		System.out.println("3- Consultar utilizador");
+		System.out.println("0- sair");
+		
+		switch(leTeclado.pedeNumero("Opção: ", 0, 3)) {
+			case 1:
+				if (criaUser()) {
+					System.out.println("Utilzador adicionado!");
+				}
+				else {
+					System.out.println("Erro na criação de utilizador!");
+				}
+				leTeclado.leLinha("Continuar...");
+				break;
+			case 2:
+				if(removeUser()) {
+					System.out.println("Utilizador removido!");		
+				}
+				else
+					System.out.println("Erro na remoção do utilizador");
+					leTeclado.leLinha("Continuar...");
+				break;
+			case 3:
+				System.out.println("jsddvhsv1");
+				if(!consultaUser()) {
+					System.out.println("Erro na consulta de utilizador!");			
+				}
+				leTeclado.leLinha("Continuar...");
+				break;
+			
+		}
+		
+	}
+	public void menuFac() {
+		 System.out.println("------------Sub Menu das Faculades------------");
+			System.out.println("1- Adicionar faculdade");
+			System.out.println("2- Remover faculdade");
+			System.out.println("3- Consultar faculdade");
+			System.out.println("Opção: ");
+			int option2 = leTeclado.pedeNumero("Opção: ", 0, 3);
+	}
+	public void menuDep() {
+		System.out.println("------------Sub Menu dos Departamentos------------");
+		System.out.println("1- Adicionar departamento");
+		System.out.println("2- Remover departamento");
+		System.out.println("3- Consultar Departamento");
+		System.out.println("Opção: ");
+		int option3 = leTeclado.pedeNumero("Opção: ", 0, 3);
+		
+	}
+	public void menuEleicoes() {
+		System.out.println("------------Sub Menu das Eleições------------");
+		System.out.println("1- Criar eleição");
+		System.out.println("2- Adicionar listas");
+		System.out.println("3- Remover listas");
+		System.out.println("4- Consultar listas");
+		System.out.println("5- Remover eleições");
+		System.out.println("6- Consultar eleições");
+		int option4 = leTeclado.pedeNumero("Opção: ", 0, 3);
+		
+	}
 	public boolean criaUser() {
 		int nccTemp = leTeclado.pedeNumero("Número de cartão de cidadão: ", 9999999, 100000000);
 		try {
