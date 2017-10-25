@@ -633,7 +633,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		n_facul;
+		return n_facul;
 	}
 	
 	public boolean setFacudade(int nCC, String n_faculdade) throws RemoteException {
@@ -756,11 +756,20 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 
-	/*
-	public boolean addMembroMesaVoto(String mesaVoto,int nCC) throws RemoteException {
-		
+	
+	public String addMembrosMesaVoto(int mesaVoto, int nCC1, int nCC2, int nCC3) throws RemoteException {
+		try {
+			PreparedStatement st = conn.prepareStatement("UPDATE mesavoto SET id_pessoa1 = '"+nCC1+"', id_pessoa2 = '"+nCC2+"', id_pessoa3 = '"+nCC3+"' WHERE id = '"+mesaVoto+"'");
+			st.executeUpdate();
+			conn.commit();
+			return "type : add_MemberVoteTable , ok : true";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "type : add_MemberVoteTable , ok : false";
+		}
 	}
 	
+	/*
 	public boolean removeMembroMesaVoto(String mesaVoto,int nCC) throws RemoteException {
 		
 	}
@@ -768,7 +777,9 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	public ArrayList <String> listaMembrosMesaVoto(String mesaVoto) throws RemoteException {
 		
 	}
-
+	
+	*/
+	/*
 	public boolean votaAntecipadamente(int nCC, String passwordUser) throws RemoteException {
 		
 	}
