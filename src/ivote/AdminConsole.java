@@ -141,6 +141,7 @@ public class AdminConsole extends UnicastRemoteObject{
 				String tipoTemp = tipoEleicao();
 				String horaInicioTemp = leTeclado.pedeDataHora("Data de Inicio: ");
 				String horaFim = leTeclado.pedeDataHora("Data de Fim: ");
+				
 				break;
 			case 2:
 				break;
