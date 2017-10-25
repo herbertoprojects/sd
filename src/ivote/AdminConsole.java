@@ -33,7 +33,9 @@ public class AdminConsole extends UnicastRemoteObject{
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			//e.printStackTrace();
 		}*/
-		consola.menu();
+		while(true) {
+			consola.menu();
+		}
 		
 
 	}
@@ -77,19 +79,21 @@ public class AdminConsole extends UnicastRemoteObject{
 							leTeclado.leLinha("Continuar...");
 							break;
 						case 2:
-							if(!removeUser()) {
-								System.out.println("Erro na remoção de utilizador!");
-								
+							if(removeUser()) {
+								System.out.println("Utilizador removido!");		
 							}
-							
+							else
+								System.out.println("Erro na remoção do utilizador");
+								leTeclado.leLinha("Continuar...");
 							break;
 						case 3:
+							System.out.println("jsddvhsv1");
 							if(!consultaUser()) {
-								System.out.println("Erro na consulta de utilizador!");
+								System.out.println("Erro na consulta de utilizador!");			
 							}
-
-							option = sc.nextInt();
-						break;
+							leTeclado.leLinha("Continuar...");
+							break;
+						
 					}
 			break;
 				
@@ -255,10 +259,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		}
 		
 		return false;
-		
-		
-		
-		
+				
 		
 	}
 	
