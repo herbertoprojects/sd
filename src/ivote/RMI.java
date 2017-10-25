@@ -825,9 +825,24 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return tempNum;
 	}
 
-	@Override
+	
 	public boolean testeNCC(int ncc) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+		int contador = 0;
+		try {
+			Statement st = conn.createStatement();
+			String sql = "select count(*) from pessoa WHERE  numeroCc = '"+ncc+"'";
+			ResultSet rs = st.executeQuery(sql);
+			rs.next();
+			contador = rs.getInt(1);
+			conn.close();
+			if(contador!=0) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }
