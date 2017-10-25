@@ -1,0 +1,4 @@
+ipServerTcp:localhost
+portServerTcp:1220
+ipRmiServer:localhost
+portRmiServer:7000
