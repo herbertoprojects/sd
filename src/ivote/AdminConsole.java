@@ -28,11 +28,11 @@ public class AdminConsole extends UnicastRemoteObject{
 			e1.printStackTrace();
 		}
 
-		try {
+		/*try {
 			//comunicacao = (RMIRemoteInterface) Naming.lookup("rmi://localhost:7000/DepartamentoInformatica");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			//e.printStackTrace();
-		}
+		}*/
 		consola.menu();
 		
 
@@ -232,4 +232,5 @@ public class AdminConsole extends UnicastRemoteObject{
 		return "";
 		
 	}
+	
 }

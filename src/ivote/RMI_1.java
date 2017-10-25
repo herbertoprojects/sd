@@ -22,6 +22,7 @@ public interface RMI_1 extends Remote{
 	public ArrayList <String> ListFaculdades() throws RemoteException;//retorna a lista de faculdade
 	public ArrayList <String> ListDepartamentos(int id_faculd) throws RemoteException;//retorna a lista de departamentos de uma faculdade
 	
+	public boolean testeNCC(int ncc) throws RemoteException;
 	
 	//Gerir departamentos
 	public boolean addDepartamento(String sigla, String nomeDepart, int id_dep, int id_fac)throws RemoteException;
