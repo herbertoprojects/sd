@@ -5,9 +5,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.ArrayList;
-
-import RMI_1;
-
 import java.rmi.Naming;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
