@@ -146,7 +146,16 @@ public class AdminConsole extends UnicastRemoteObject{
 			}
 	}
 	private boolean consultaFac() {
-		// TODO Auto-generated method stub
+		
+		try {
+			for(String temp:comunicacao.ListFaculdades()) {
+				System.out.println(temp);				
+			}
+			return true;
+			
+		} catch (RemoteException e) {
+			e.printStackTrace();	
+		}	
 		return false;
 	}
 
@@ -329,15 +338,18 @@ public class AdminConsole extends UnicastRemoteObject{
 			if(comunicacao.testeNCC(tempNumero)) {
 				String nome = comunicacao.getNome(tempNumero);
 				System.out.println("Nome: "+nome);
+				return true;
 			}
-			else
+			else {
 				System.out.println("Utilizador não encontrado");
-			
+				return false;
+			}
+				
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			
 		}
-		return true;
+		return false;
 
 	}
 	
@@ -389,10 +401,11 @@ public class AdminConsole extends UnicastRemoteObject{
 			}
 			do {
 				idFac = leTeclado.pedeNumero("Introduza o id da faculdade (0- Cancelar): ", 0, 2000000);
-				
+	
 			}
 			while (!comunicacao.removeFaculdade(idFac) || idFac == 0);
-				
+			return idFac == 0 ? false:true;
+			
 		} catch (RemoteException e) {
 			e.printStackTrace();	
 		}	
