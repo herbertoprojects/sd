@@ -321,7 +321,6 @@ public class AdminConsole extends UnicastRemoteObject{
 
 	}
 	
-<<<<<<< HEAD
 	public String tipoEleicao() {
 		System.out.println("Escolha o tipo de eleição:");
 		System.out.println("1- Núcleo de Estudantes");
@@ -340,7 +339,6 @@ public class AdminConsole extends UnicastRemoteObject{
 		}
 		return "";
 	}
-=======
 	public boolean criaFac() {
 		
 		String nomeFaculd = leTeclado.leLinha("Nome da faculadade: ");
@@ -382,7 +380,5 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	
-	
->>>>>>> branch 'master' of https://github.com/herbertoprojects/sd
 	
 }
