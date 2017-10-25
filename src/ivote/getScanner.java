@@ -48,7 +48,8 @@ public class getScanner {
 		System.out.println(text);
 		int anoTemp = pedeNumero("Ano: ", 1900,1900 + (new Date(System.currentTimeMillis()).getYear()));
 		int mesTemp = pedeNumero("Mês: ", 1, 12);		
-		String data = String.format("%2.0n %4.0n", mesTemp, anoTemp); 
+
+		String data = formatNum(mesTemp, 2)+"/"+formatNum(anoTemp, 4);
 		return data;
 		
 	}
@@ -84,8 +85,19 @@ public class getScanner {
 		int horaTem = pedeNumero("Horas: ",0,23);
 		int minTemp = pedeNumero("Minutos: ",0,59);
 		
-		return String.format("%4.0n/%2.0n/%2.0n %2.0n:%2.0n", anoTemp,mesTemp,diaTemp,horaTem,minTemp);
+		return (formatNum(anoTemp, 4)+"/"+
+				formatNum(mesTemp, 2)+"/"+
+				formatNum(diaTemp, 2)+" "+
+				formatNum(horaTem, 2)+":"+
+				formatNum(minTemp, 2));
 	}
 	
+	public String formatNum (int num,int casas) {
+		String texto = ""+num;
+		while(texto.length()<casas) {
+			texto = "0"+texto;
+		}
+		return texto;
+	}
 	
 }

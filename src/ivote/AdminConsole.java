@@ -1,5 +1,8 @@
 package ivote;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -25,11 +28,12 @@ public class AdminConsole extends UnicastRemoteObject{
 			e1.printStackTrace();
 		}
 
-		/*try {
-			//comunicacao = (RMIRemoteInterface) Naming.lookup("rmi://localhost:7000/DepartamentoInformatica");
-		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-			//e.printStackTrace();
-		}*/
+		try {
+			comunicacao = (RMI_1) Naming.lookup("rmi://localhost:7000/rmi");
+		} catch (RemoteException | MalformedURLException | NotBoundException  e) {
+			e.printStackTrace();
+		}
+		
 		consola.menuInicial();
 
 	}
@@ -73,43 +77,46 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	public void menuUtil() {
-		System.out.println();
-		System.out.println("------------Sub Menu do Utilizador------------");
-		System.out.println("1- Adicionar utilizador");
-		System.out.println("2- Remover utilizador");
-		System.out.println("3- Consultar utilizador");
-		System.out.println("0- sair");
-		
-		switch(leTeclado.pedeNumero("Opção: ", 0, 3)) {
-			case 1:
-				if (criaUser()) {
-					System.out.println("Utilzador adicionado!");
-				}
-				else {
-					System.out.println("Erro na criação de utilizador!");
-				}
-				leTeclado.leLinha("Continuar...");
-				break;
-			case 2:
-				if(removeUser()) {
-					System.out.println("Utilizador removido!");		
-				}
-				else
-					System.out.println("Erro na remoção do utilizador");
-					leTeclado.leLinha("Continuar...");
-				break;
-			case 3:
-				if(!consultaUser()) {
-					System.out.println("Erro na consulta de utilizador!");			
-				}
-				leTeclado.leLinha("Continuar...");
-				break;
+		while(true) {
+			System.out.println();
+			System.out.println("------------Sub Menu do Utilizador------------");
+			System.out.println("1- Adicionar utilizador");
+			System.out.println("2- Remover utilizador");
+			System.out.println("3- Consultar utilizador");
+			System.out.println("0- sair");
 			
+			switch(leTeclado.pedeNumero("Opção: ", 0, 3)) {
+				case 1:
+					if (criaUser()) {
+						System.out.println("Utilzador adicionado!");
+					}
+					else {
+						System.out.println("Erro na criação de utilizador!");
+					}
+					break;
+				case 2:
+					if(removeUser()) {
+						System.out.println("Utilizador removido!");		
+					}
+					else
+						System.out.println("Erro na remoção do utilizador");
+					break;
+				case 3:
+					if(!consultaUser()) {
+						System.out.println("Erro na consulta de utilizador!");			
+					}
+					break;
+				case 0:
+					return;
+				
+			}
+			leTeclado.leLinha("Continuar...");
 		}
 		
 	}
 	public void menuFac() {
-		 System.out.println("------------Sub Menu das Faculades------------");
+		while(true) {
+		 	System.out.println("------------Sub Menu das Faculades------------");
 			System.out.println("1- Adicionar faculdade");
 			System.out.println("2- Remover faculdade");
 			System.out.println("3- Consultar faculdade");
@@ -123,7 +130,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				else {
 					System.out.println("Erro na criação da faculdade!");
 				}
-				leTeclado.leLinha("Continuar...");
 				break;
 			case 2:
 				if(removeFac()) {
@@ -131,19 +137,19 @@ public class AdminConsole extends UnicastRemoteObject{
 				}
 				else
 					System.out.println("Erro na remoção da faculdade");
-					leTeclado.leLinha("Continuar...");
 				break;
 			case 3:
 				if(!consultaFac()) {
 					System.out.println("Erro na consulta da faculdade!");			
 				}
-				leTeclado.leLinha("Continuar...");
 				break;
 				
 			case 0:
 				return;
 			
 			}
+			leTeclado.leLinha("Continuar...");
+		}
 	}
 	private boolean consultaFac() {
 		
@@ -160,78 +166,83 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 
 	public void menuDep() {
-		System.out.println("------------Sub Menu dos Departamentos------------");
-		System.out.println("1- Adicionar departamento");
-		System.out.println("2- Remover departamento");
-		System.out.println("3- Consultar Departamento");
-		System.out.println("0- Sair");
-		
-		switch(leTeclado.pedeNumero("Opção: ", 0, 3)) {
-		
-			case 1:
-				if (criaDep()) {
-					System.out.println("Departamento adicionado!");
-				}
-				else {
-					System.out.println("Erro na criação do departamento!");
-				}
-				leTeclado.leLinha("Continuar...");
-				break;
-				
-			case 2:
-				if(removeDep()) {
-					System.out.println("Departamento removido!");		
-				}
-				else
-					System.out.println("Erro na remoção de departamento");
+		while(true) {
+			System.out.println("------------Sub Menu dos Departamentos------------");
+			System.out.println("1- Adicionar departamento");
+			System.out.println("2- Remover departamento");
+			System.out.println("3- Consultar Departamento");
+			System.out.println("0- Sair");
+			
+			switch(leTeclado.pedeNumero("Opção: ", 0, 3)) {
+			
+				case 1:
+					if (criaDep()) {
+						System.out.println("Departamento adicionado!");
+					}
+					else {
+						System.out.println("Erro na criação do departamento!");
+					}
 					leTeclado.leLinha("Continuar...");
-				break;
+					break;
+					
+				case 2:
+					if(removeDep()) {
+						System.out.println("Departamento removido!");		
+					}
+					else
+						System.out.println("Erro na remoção de departamento");
+						leTeclado.leLinha("Continuar...");
+					break;
+					
+				case 3:
+					if(!consultaDep()) {
+						System.out.println("Erro na consulta de departamento!");			
+					}
+					leTeclado.leLinha("Continuar...");
+					break;
 				
-			case 3:
-				if(!consultaDep()) {
-					System.out.println("Erro na consulta de departamento!");			
-				}
-				leTeclado.leLinha("Continuar...");
-				break;
-			
-			case 0:
-				return;
-			
+				case 0:
+					return;
 				
+					
+			}
+			leTeclado.leLinha("Continuar...");
 		}
 		
 		
 	}
 	
 	public void menuEleicoes() {
-		System.out.println("------------Sub Menu das Eleições------------");
-		System.out.println("1- Criar eleição");
-		System.out.println("2- Adicionar listas");
-		System.out.println("3- Remover listas");
-		System.out.println("4- Consultar listas");
-		System.out.println("5- Remover eleições");
-		System.out.println("6- Consultar eleições");
-		int option4 = leTeclado.pedeNumero("Opção: ", 0, 3);
-		
-		switch(leTeclado.pedeNumero("Opção: ", 0, 6)) {
-			case 1:
-				String tipoTemp = tipoEleicao();
-				String horaInicioTemp = leTeclado.pedeDataHora("Data de Inicio: ");
-				String horaFim = leTeclado.pedeDataHora("Data de Fim: ");
-				
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			case 5:
-				break;
-			case 6:
-				break;
-			case 0:
-				return;
+		while(true) {
+			System.out.println("------------Sub Menu das Eleições------------");
+			System.out.println("1- Criar eleição");
+			System.out.println("2- Adicionar listas");
+			System.out.println("3- Remover listas");
+			System.out.println("4- Consultar listas");
+			System.out.println("5- Remover eleições");
+			System.out.println("6- Consultar eleições");
+			
+			switch(leTeclado.pedeNumero("Opção: ", 0, 6)) {
+				case 1:
+					String tipoTemp = tipoEleicao();
+					String horaInicioTemp = leTeclado.pedeDataHora("Data de Inicio: ");
+					String horaFim = leTeclado.pedeDataHora("Data de Fim: ");
+					
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					break;
+				case 6:
+					break;
+				case 0:
+					return;
+			}
+			leTeclado.leLinha("Continuar...");
 		}
 		
 	}
