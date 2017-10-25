@@ -11,6 +11,8 @@ public class AdminConsole extends UnicastRemoteObject{
 	private static final long serialVersionUID = 1L;
 	public static RMI_1 comunicacao;
 	public getScanner leTeclado;
+	
+	
 	public AdminConsole() throws RemoteException{
 		super();
 		leTeclado = new getScanner();

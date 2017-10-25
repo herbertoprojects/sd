@@ -136,9 +136,10 @@ public interface RMI_1 extends Remote{
 	public boolean setDataCC(int nCC, String n_data) throws RemoteException;
 	
 	
-	/*
+	
 	//Gerir membros de cada mesa de voto
-	public boolean addMembroMesaVoto(String mesaVoto,int nCC) throws RemoteException;
+	public String addMembroMesaVoto(String mesaVoto,int nCC1, int nCC2, int nCC3) throws RemoteException;
+	/*
 	public boolean removeMembroMesaVoto(String mesaVoto,int nCC) throws RemoteException;
 	public ArrayList <String> listaMembrosMesaVoto(String mesaVoto) throws RemoteException;
 
