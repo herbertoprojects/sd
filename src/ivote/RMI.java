@@ -33,6 +33,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			
 			try {
 				primario(portaRMI);
+				
 				rmi = (RMI_1) Naming.lookup("rmi://"+args[0]+":"+portaRMI+"/rmi");
 				System.out.println("Primário ligado!");
 			} catch (MalformedURLException e1) {
