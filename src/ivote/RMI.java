@@ -594,20 +594,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public boolean getPassword(int nCC)throws RemoteException {
+	public String getPassword(int nCC)throws RemoteException {
+		String n_pass = "";
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select password from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
+			rs.next();
+			n_pass = rs.getString(1);
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return n_pass;
 	}
 	
 	public boolean setPassword(int nCC, String n_password) throws RemoteException {
@@ -622,20 +621,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public boolean getFacudade(int nCC)throws RemoteException {
+	public String getFacudade(int nCC)throws RemoteException {
+		String n_facul = "";
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select faculdade from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
+			rs.next();
+			n_facul = rs.getString(1);
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		n_facul;
 	}
 	
 	public boolean setFacudade(int nCC, String n_faculdade) throws RemoteException {
@@ -650,20 +648,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public boolean getDepartamento(int nCC)throws RemoteException {
+	public String getDepartamento(int nCC)throws RemoteException {
+		String n_depar = "";
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select departamento from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
+			rs.next();
+			n_depar = rs.getString(1);
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return n_depar;
 	}
 	
 	public boolean setDepartamento(int nCC, String n_departamento) throws RemoteException {
@@ -678,20 +675,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public boolean getTelefone(int nCC)throws RemoteException {
+	public int getTelefone(int nCC)throws RemoteException {
+		int n_tel = 0;
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select telefone from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getInt(1)));
-			}
+			rs.next();
+			n_tel = rs.getInt(1);
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return n_tel;
 	}
 	
 	public boolean setTelefone(int nCC, int n_telefone) throws RemoteException {
@@ -706,20 +702,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public boolean getMorada(int nCC)throws RemoteException {
+	public String getMorada(int nCC)throws RemoteException {
+		String n_mora = "";
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select morada from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
+			rs.next();
+			n_mora = rs.getString(1);
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return n_mora;
 	}
 	
 	public boolean setMorada(int nCC, String n_morada) throws RemoteException {
@@ -734,20 +729,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public boolean getDataCC(int nCC)throws RemoteException {
+	public String getDataCC(int nCC)throws RemoteException {
+		String n_dat = "";
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select dataCc from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
+			rs.next();
+			n_dat = rs.getString(1);
 			conn.close();
-			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return n_dat;
 	}
 	
 	public boolean setDataCC(int nCC, String n_data) throws RemoteException {

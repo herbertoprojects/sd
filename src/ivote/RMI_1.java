@@ -109,7 +109,6 @@ public interface RMI_1 extends Remote{
 	 */
 	
 	public int getNCC (String nome_p,int telefone_p) throws RemoteException;// nº Cartao de Cidadao
-
 	public boolean setNCC(int nCC, int novoNCC) throws RemoteException;
 	
 	public String getTipoP(int nCC)throws RemoteException;
@@ -118,22 +117,22 @@ public interface RMI_1 extends Remote{
 	public String getNome(int nCC)throws RemoteException;
 	public boolean setNome(int nCC, String n_nome) throws RemoteException;
 	
-	public boolean getPassword(int nCC)throws RemoteException;
+	public String getPassword(int nCC)throws RemoteException;
 	public boolean setPassword(int nCC, String n_password) throws RemoteException;
 	
-	public boolean getFacudade(int nCC)throws RemoteException;
+	public String getFacudade(int nCC)throws RemoteException;
 	public boolean setFacudade(int nCC, String n_faculdade) throws RemoteException;
 	
-	public boolean getDepartamento(int nCC)throws RemoteException;
+	public String getDepartamento(int nCC)throws RemoteException;
 	public boolean setDepartamento(int nCC, String n_departamento) throws RemoteException;
 	
-	public boolean getTelefone(int nCC)throws RemoteException;
+	public int getTelefone(int nCC)throws RemoteException;
 	public boolean setTelefone(int nCC, int n_telefone) throws RemoteException;
 	
-	public boolean getMorada(int nCC)throws RemoteException;
+	public String getMorada(int nCC)throws RemoteException;
 	public boolean setMorada(int nCC, String n_morada) throws RemoteException;
 	
-	public boolean getDataCC(int nCC)throws RemoteException;
+	public String getDataCC(int nCC)throws RemoteException;
 	public boolean setDataCC(int nCC, String n_data) throws RemoteException;
 	
 	
