@@ -281,10 +281,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	
 	
 	//Em falta String user, String pass!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public String addMesaVoto(int id, int id_depart, int id_faculd, int id_elei) throws RemoteException {
+	public String addMesaVoto(int id, int id_depart, int id_faculd, int id_elei, String user, String pass) throws RemoteException {
 		try {
 			Statement st = conn.createStatement();
-			st.executeUpdate("Insert into mesavoto values ('"+id+"', '"+id_depart+"', '"+id_faculd+"', '"+id_elei+"')");
+			st.executeUpdate("Insert into mesavoto(id, id_depart, id_faculd, id_eleicao, usern, pass) values ('"+id+"', '"+id_depart+"', '"+id_faculd+"', '"+id_elei+"', '"+user+"', '"+pass+"')");
 			conn.commit();
 			return "type : add_voteTable , ok : true";
 		} catch (SQLException e) {
@@ -293,10 +293,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public String addMesaVoto(int id, int id_faculd, int id_elei) throws RemoteException {
+	public String addMesaVoto(int id, int id_faculd, int id_elei, String user, String pass) throws RemoteException {
 		try {
 			Statement st = conn.createStatement();
-			st.executeUpdate("Insert into mesavoto values ('"+id+"', null, '"+id_faculd+"', '"+id_elei+"')");
+			st.executeUpdate("Insert into mesavoto() values ('"+id+"', null, '"+id_faculd+"', '"+id_elei+"', '"+user+"', '"+pass+"')");
 			conn.commit();
 			return "type : add_voteTable , ok : true";
 		} catch (SQLException e) {
@@ -516,6 +516,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	public int getNCC (String nome_p,int telefone_p) throws RemoteException {
 		int numCC = 0;
 		try {
+			conn.setAutoCommit(false);
 			Statement st = conn.createStatement();
 			String sql = "select numeroCc from pessoa where nome = ('"+nome_p+"') and telefone = ('"+telefone_p+"')";
 			ResultSet rs = st.executeQuery(sql);
@@ -524,6 +525,21 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				System.out.println("lost connection db");
+			}
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println();
+			}
 		}
 		return numCC;
 	}
@@ -771,7 +787,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	
 	public String removeMembroMesaVoto(int mesaVoto) throws RemoteException {
 		try {
-			PreparedStatement st = conn.prepareStatement("UPDATE mesavoto SET id_pessoa1 = '"+null+"', id_pessoa2 = '"+null+"', id_pessoa3 = '"+null+"' WHERE id = '"+mesaVoto+"'");
+			PreparedStatement st = conn.prepareStatement("UPDATE mesavoto SET id_pessoa1 = null, id_pessoa2 = null, id_pessoa3 = null WHERE id = "+mesaVoto+"");
 			st.executeUpdate();
 			conn.commit();
 			return "type : remove_MembersVoteTable , ok : true";

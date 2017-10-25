@@ -23,6 +23,8 @@ public interface RMI_1 extends Remote{
 	
 	public boolean testeNCC(int ncc) throws RemoteException;
 	
+	
+	
 	//Gerir departamentos
 	public boolean addDepartamento(String sigla, String nomeDepart, int id_dep, int id_fac)throws RemoteException;
 	public boolean removeDepartamento(int id_dep, int id_fac)throws RemoteException;
@@ -52,8 +54,8 @@ public interface RMI_1 extends Remote{
 	*/
 	
 	//Gerir mesas de voto
-	public String addMesaVoto(int id, int id_depart, int id_faculd, int id_elei) throws RemoteException;
-	public String addMesaVoto(int id, int id_faculd, int id_elei) throws RemoteException;
+	public String addMesaVoto(int id, int id_depart, int id_faculd, int id_elei, String user, String pass) throws RemoteException;
+	public String addMesaVoto(int id, int id_faculd, int id_elei, String user, String pass) throws RemoteException;
 	public boolean removeMesaVoto(int id_MV) throws RemoteException;
 	public ArrayList <String> listMesaVoto(int id_elei) throws RemoteException;
 	public ArrayList <String> listMesaVoto() throws RemoteException;
@@ -137,13 +139,12 @@ public interface RMI_1 extends Remote{
 	
 	//Gerir membros de cada mesa de voto
 	public String addMembroMesaVoto(String mesaVoto,int nCC1, int nCC2, int nCC3) throws RemoteException;
+	public String removeMembroMesaVoto(int mesaVoto) throws RemoteException;
 	/*
-	public boolean removeMembroMesaVoto(String mesaVoto,int nCC) throws RemoteException;
 	public ArrayList <String> listaMembrosMesaVoto(String mesaVoto) throws RemoteException;
 
 	//voto antecipado
 	public boolean votaAntecipadamente(int nCC, String passwordUser) throws RemoteException;
-	f
 	
 	//Metodos para servidor TCP
 	//todas as comunicações terao de ser autenticadas por questao de seguranca
