@@ -202,21 +202,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 		
 	}
-	private boolean consultaDep() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	private boolean removeDep() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	private boolean criaDep() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 	public void menuEleicoes() {
 		System.out.println("------------Sub Menu das Eleições------------");
 		System.out.println("1- Criar eleição");
@@ -394,7 +380,7 @@ public class AdminConsole extends UnicastRemoteObject{
 
 	public boolean removeFac() {
 		
-		int idFac =0;
+		int idFac=0;
 		try {
 			for(String temp:comunicacao.ListFaculdades()) {
 				System.out.println(temp);				
@@ -411,6 +397,68 @@ public class AdminConsole extends UnicastRemoteObject{
 		}	
 		return false;
 	}
+	
+	public boolean consultaDep() {
+		
+		int idDep=0;
+		try {
+			for(String dep:comunicacao.ListDepartamentos(idDep)) {
+				System.out.println(dep);				
+			}
+			return true;
+			
+		} catch (RemoteException e) {
+			e.printStackTrace();	
+		}	
+		return false;		
+	}
+	
+	public boolean removeDep() {
+		
+		int idDep_2=0;
+		try {
+			for(String temp_2:comunicacao.ListDepartamentos(idDep_2)) {
+				System.out.println(temp_2);				
+			}
+			do {
+				idDep_2 = leTeclado.pedeNumero("Introduza o id do departamento (0- Cancelar): ", 0, 2000000);
+	
+			}
+			while (!comunicacao.removeFaculdade(idDep_2) || idDep_2 == 0);
+			return idDep_2 == 0 ? false:true;
+			
+		} catch (RemoteException e) {
+			e.printStackTrace();	
+		}	
+		return false;
+			
+	}
+	
+	public boolean criaDep() {
+		
+		String sigla = leTeclado.leLinha("Sigla do departamento: ");
+		String nomeDepart = leTeclado.leLinha("Nome do departamento: ");
+		int id = leTeclado.pedeNumero("Id do departamento: ", 1000, 200000000);
+		int idFac = leTeclado.pedeNumero("Id da faculdade", 1000, 200000000);
+		
+		System.out.println(id+ " "+sigla+" "+nomeDepart+" "+idFac);
+		System.out.println("1- Confirmar");
+		System.out.println("0- Cancelar");
+		
+		if(leTeclado.pedeNumero("Opção: ", 0, 1)== 1) {
+			try {
+				if(comunicacao.addDepartamento(sigla, nomeDepart, id, idFac )) {
+					return true;
+				}
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}		
+		}
+		return false;
+		
+		
+	}
+	
 	
 	
 	
