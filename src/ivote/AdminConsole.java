@@ -235,7 +235,30 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	public boolean removeUser() {
-		return true;
+		
+		int tempNumero = leTeclado.pedeNumero("Introduza o número de cartão de cidadão: ", 9999999, 100000000);
+		try {
+			if(comunicacao.testeNCC(tempNumero)) {
+				String nome = comunicacao.getNome(tempNumero);
+				System.out.println("Nome: "+nome);
+				System.out.println("1- Confirmar");
+				System.out.println("0- Cancelar");
+				if(leTeclado.pedeNumero("Opção: ", 0, 1) == 1) {
+					if(comunicacao.removerUtilizador(tempNumero)) {
+						return true;
+					}										
+				}
+			}
+			
+		} catch (RemoteException e) {
+			e.printStackTrace();	
+		}
+		
+		return false;
+		
+		
+		
+		
 		
 	}
 	
