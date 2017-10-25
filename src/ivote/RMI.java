@@ -5,9 +5,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.ArrayList;
-
-import RMI_1;
-
 import java.rmi.Naming;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
@@ -72,12 +69,12 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			
 		}
 	}*/
-	
-	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, int id_faculd, int id_depart){
+	//receber o nome das faculdades e departamentos
+	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart){
 		try {
 			Statement st = conn.createStatement();
 			//System.out.println("'"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd')), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', '"+id_depart+"')");
-			st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', '"+id_depart+"')");
+			st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+no_faculd+"', '"+no_depart+"')");
 			conn.commit();
 			return "type : register , ok : true";
 		} catch (SQLException e) {
