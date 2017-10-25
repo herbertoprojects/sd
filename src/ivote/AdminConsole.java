@@ -77,6 +77,10 @@ public class AdminConsole extends UnicastRemoteObject{
 							leTeclado.leLinha("Continuar...");
 							break;
 						case 2:
+							if(!removeUser()) {
+								System.out.println("Erro na remoção de utilizador!");
+								
+							}
 							
 							break;
 						case 3:
@@ -226,6 +230,12 @@ public class AdminConsole extends UnicastRemoteObject{
 		return false;
 		
 	}
+	
+	public boolean removeUser() {
+		return true;
+		
+	}
+	
 	public String pedeFac() {
 		return "";
 		
@@ -236,4 +246,5 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 	}
 	
+
 }
