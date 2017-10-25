@@ -77,6 +77,10 @@ public class AdminConsole extends UnicastRemoteObject{
 							leTeclado.leLinha("Continuar...");
 							break;
 						case 2:
+							if(!removeUser()) {
+								System.out.println("Erro na remoção de utilizador!");
+								
+							}
 							
 							break;
 						case 3:
@@ -229,6 +233,12 @@ public class AdminConsole extends UnicastRemoteObject{
 		return false;
 		
 	}
+	
+	public boolean removeUser() {
+		return true;
+		
+	}
+	
 	public String pedeFac() {
 		return "";
 		
@@ -240,12 +250,12 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	public boolean consultaUser() {
-		System.out.println("1- procurar por ncc ");
-		System.out.println("2- procurar por nome");
-		System.out.println("3- procurar por contacto");
-		System.out.println("0- sair");
+		System.out.println("1- Procurar por númeo cartão de cidadão");
+		System.out.println("2- Procurar por nome");
+		System.out.println("3- Procurar por contacto");
+		System.out.println("0- Sair");
 		switch (leTeclado.pedeNumero("Opção: ", 0, 3)) {
-			case 1:
+			case 1: 
 				break;
 			case 2:
 				break;
