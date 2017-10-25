@@ -11,6 +11,7 @@ public class AdminConsole extends UnicastRemoteObject{
 	private static final long serialVersionUID = 1L;
 	public static RMI_1 comunicacao;
 	public getScanner leTeclado;
+	
 	public AdminConsole() throws RemoteException{
 		super();
 		leTeclado = new getScanner();
@@ -29,9 +30,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			//e.printStackTrace();
 		}*/
-		
 		consola.menuInicial();
-		
 
 	}
 	
