@@ -68,7 +68,7 @@ public class getScanner {
 				if(diaTemp>30) {System.out.println("Dia invalido");}else {return diaTemp;}
 				break;
 			default:
-				break;
+				return diaTemp;
 				
 			}
 		}
