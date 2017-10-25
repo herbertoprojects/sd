@@ -116,7 +116,6 @@ public interface RMI_1 extends Remote{
 	
 	public String getNome(int nCC)throws RemoteException;
 	public boolean setNome(int nCC, String n_nome) throws RemoteException;
-	public String pesquisaNome (String nome) throws RemoteException;
 	
 	public boolean getPassword(int nCC)throws RemoteException;
 	public boolean setPassword(int nCC, String n_password) throws RemoteException;

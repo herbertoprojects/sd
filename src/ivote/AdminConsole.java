@@ -250,34 +250,22 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	public boolean consultaUser() {
-		System.out.println("1- Procurar por númeo cartão de cidadão");
-		System.out.println("2- Procurar por nome");
-		System.out.println("3- Procurar por contacto");
-		System.out.println("0- Sair");
-		switch (leTeclado.pedeNumero("Opção: ", 0, 3)) {
-			case 1: int tempNumero = leTeclado.pedeNumero("Introduza o número: ", 9999999, 100000000);
-			try {
-				if(comunicacao.testeNCC(tempNumero)) {
-					String nome = comunicacao.getNome(tempNumero);
-					System.out.println(nome);
-				}
-				else
-					System.out.println("Utilizador não encontrado");
-				
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}			
-				break;
-			case 2: String tempNome = leTeclado.leLinha("Nome: ");
-					
-				
-				break;
-			case 3:
-				break;
-			case 0:
-				break;
+		
+		int tempNumero = leTeclado.pedeNumero("Introduza o número de cartão de cidadão: ", 9999999, 100000000);
+		try {
+			if(comunicacao.testeNCC(tempNumero)) {
+				String nome = comunicacao.getNome(tempNumero);
+				System.out.println("Nome: "+nome);
+			}
+			else
+				System.out.println("Utilizador não encontrado");
+			
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			
 		}
 		return true;
+
 	}
 	
 }
