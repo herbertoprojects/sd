@@ -86,6 +86,18 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
+	public boolean removerUtilizador(int NCC) throws RemoteException {
+		try {
+			Statement st = conn.createStatement();
+			st.executeUpdate("Delete from pessoa where numeroCc = ('"+NCC+"')");
+			conn.commit();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	public ArrayList <String> ListFaculdades() throws RemoteException {
 		ArrayList<String> faculdades = new ArrayList<String>();
 		try {
