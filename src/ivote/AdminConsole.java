@@ -255,10 +255,10 @@ public class AdminConsole extends UnicastRemoteObject{
 		System.out.println("3- Procurar por contacto");
 		System.out.println("0- Sair");
 		switch (leTeclado.pedeNumero("Opção: ", 0, 3)) {
-			case 1: int numero = leTeclado.pedeNumero("Introduza o número: ", 9999999, 100000000);
+			case 1: int tempNumero = leTeclado.pedeNumero("Introduza o número: ", 9999999, 100000000);
 			try {
-				if(comunicacao.testeNCC(numero)) {
-					String nome = comunicacao.getNome(numero);
+				if(comunicacao.testeNCC(tempNumero)) {
+					String nome = comunicacao.getNome(tempNumero);
 					System.out.println(nome);
 				}
 				else
@@ -268,7 +268,9 @@ public class AdminConsole extends UnicastRemoteObject{
 				e.printStackTrace();
 			}			
 				break;
-			case 2:
+			case 2: String tempNome = leTeclado.leLinha("Nome: ");
+					
+				
 				break;
 			case 3:
 				break;
