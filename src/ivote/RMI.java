@@ -822,4 +822,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 		return tempNum;
 	}
+
+	@Override
+	public boolean testeNCC(int ncc) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
