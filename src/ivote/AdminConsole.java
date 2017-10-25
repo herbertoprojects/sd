@@ -52,10 +52,13 @@ public class AdminConsole extends UnicastRemoteObject{
 					
 					break;
 				case 2:
+					menuFac();
 					break;
 				case 3:
+					menuDep();
 					break;
 				case 4:
+					menuEleicoes();
 					break;
 				case 5:
 					break;
@@ -63,7 +66,9 @@ public class AdminConsole extends UnicastRemoteObject{
 					break;
 				case 0:
 					return;
+					
 			}
+			leTeclado.leLinha("Continuar...");
 		}
 	}
 	
