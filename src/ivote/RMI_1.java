@@ -36,6 +36,7 @@ public interface RMI_1 extends Remote{
 	
 	
 	//Criar eleição; Tipo->núcleo de estudantes, conselho geral, direção de departamento, direção de faculdade
+	//tipo de eleição -> NEstudante CGeral DDepartamento DFaculdade
 	public String criaEleicao(String tipo, String inicio, String fim, String titulo, String descricao, int id) throws RemoteException; // retorna o número da eleição
 	public ArrayList <String> listEleicao(String inicio, String fim) throws RemoteException;//pesquisa num intervalo de tempo, para pesquisar todas deixar a null
 	public ArrayList <String> listEleicao() throws RemoteException;

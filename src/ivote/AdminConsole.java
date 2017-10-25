@@ -198,6 +198,27 @@ public class AdminConsole extends UnicastRemoteObject{
 		System.out.println("6- Consultar eleições");
 		int option4 = leTeclado.pedeNumero("Opção: ", 0, 3);
 		
+		switch(leTeclado.pedeNumero("Opção: ", 0, 6)) {
+			case 1:
+				String tipoTemp = tipoEleicao();
+				String horaInicioTemp = leTeclado.pedeDataHora("Data de Inicio: ");
+				String horaFim = leTeclado.pedeDataHora("Data de Fim: ");
+				
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			case 0:
+				return;
+		}
+		
 	}
 	public boolean criaUser() {
 		int nccTemp = leTeclado.pedeNumero("Número de cartão de cidadão: ", 9999999, 100000000);
@@ -300,6 +321,24 @@ public class AdminConsole extends UnicastRemoteObject{
 
 	}
 	
+	public String tipoEleicao() {
+		System.out.println("Escolha o tipo de eleição:");
+		System.out.println("1- Núcleo de Estudantes");
+		System.out.println("2- Conselho Geral");
+		System.out.println("3- Direção de Departamento");
+		System.out.println("4- Direção de Faculdade");
+		switch(leTeclado.pedeNumero("Opção: ", 1, 4)) {
+			case 1:
+				return "NEstudante"; 
+			case 2:
+				return "CGeral";
+			case 3:
+				return "DDepartamento";
+			case 4:
+				return "DFaculdade";
+		}
+		return "";
+	}
 	public boolean criaFac() {
 		
 		String nomeFaculd = leTeclado.leLinha("Nome da faculadade: ");
@@ -339,7 +378,6 @@ public class AdminConsole extends UnicastRemoteObject{
 		}	
 		return false;
 	}
-	
 	
 	
 	
