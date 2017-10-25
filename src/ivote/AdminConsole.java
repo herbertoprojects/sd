@@ -80,7 +80,10 @@ public class AdminConsole extends UnicastRemoteObject{
 							
 							break;
 						case 3:
-							System.out.println(1);
+							if(!consultaUser()) {
+								System.out.println("Erro na consulta de utilizador!");
+							}
+
 							option = sc.nextInt();
 						break;
 					}
@@ -234,6 +237,13 @@ public class AdminConsole extends UnicastRemoteObject{
 	public String pedeDep(String faculdade) {
 		return "";
 		
+	}
+	
+	public boolean consultaUser() {
+		System.out.println("1- procurar por ");
+		System.out.println(1);
+		System.out.println(1);
+		return true;
 	}
 	
 }
