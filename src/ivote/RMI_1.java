@@ -18,6 +18,7 @@ public interface RMI_1 extends Remote{
 	// int telefone - numero de telefone
 	
 	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart) throws RemoteException;
+	public boolean removerUtilizador(int NCC) throws RemoteException;
 	
 	public ArrayList <String> ListFaculdades() throws RemoteException;//retorna a lista de faculdade
 	public ArrayList <String> ListDepartamentos(int id_faculd) throws RemoteException;//retorna a lista de departamentos de uma faculdade
