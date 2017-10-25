@@ -69,7 +69,8 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			
 		}
 	}*/
-	//receber o nome das faculdades e departamentos
+
+	
 	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart){
 		try {
 			Statement st = conn.createStatement();
@@ -791,4 +792,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		
 	}
 	*/
+	
+	public int nmtoidDepart(String nome_b)throws RemoteException {
+		int tempNum = 0;
+		try {
+			Statement st = conn.createStatement();
+			String sql = "select id from departamento where nome = ('"+nome_b+"')";
+			ResultSet rs = st.executeQuery(sql);
+			rs.next();
+			tempNum = rs.getInt(1);
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tempNum;
+	}
+	
+	public int nmtoidFaculd(String nome_b)throws RemoteException {
+		int tempNum = 0;
+		try {
+			Statement st = conn.createStatement();
+			String sql = "select id from faculdade where nome = ('"+nome_b+"')";
+			ResultSet rs = st.executeQuery(sql);
+			rs.next();
+			tempNum = rs.getInt(1);
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tempNum;
+	}
 }
