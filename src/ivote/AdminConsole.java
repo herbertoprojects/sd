@@ -39,6 +39,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		while(true) {
 			System.out.println();
 			System.out.println("------------MAIN MENU-----------");
+			System.out.println("------------MAIN MENU-----------");
 			System.out.println("1- Gerir utilizador");//adicionar, remover, consultar
 			System.out.println("2- Gerir faculdades");//adicionar, remover, consultar
 			System.out.println("3- Gerir departamentos");//adicionar, remover, consultar
