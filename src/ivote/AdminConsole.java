@@ -52,8 +52,7 @@ public class AdminConsole extends UnicastRemoteObject{
 			
 			switch (leTeclado.pedeNumero("Opção: ", 0, 6)) {
 				case 1:
-					menuUtil();
-					
+					menuUtil();	
 					break;
 				case 2:
 					menuFac();
@@ -114,6 +113,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		}
 		
 	}
+	
 	public void menuFac() {
 		while(true) {
 		 	System.out.println("------------Sub Menu das Faculades------------");
@@ -151,6 +151,7 @@ public class AdminConsole extends UnicastRemoteObject{
 			leTeclado.leLinha("Continuar...");
 		}
 	}
+	
 	private boolean consultaFac() {
 		
 		try {
@@ -246,6 +247,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		}
 		
 	}
+	
 	public boolean criaUser() {
 		int nccTemp = leTeclado.pedeNumero("Número de cartão de cidadão: ", 9999999, 100000000);
 		try {
@@ -368,6 +370,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		}
 		return "";
 	}
+	
 	public boolean criaFac() {
 		
 		String nomeFaculd = leTeclado.leLinha("Nome da faculadade: ");
@@ -469,8 +472,5 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 		
 	}
-	
-	
-	
-	
+
 }
