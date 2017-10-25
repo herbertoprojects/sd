@@ -255,7 +255,17 @@ public class AdminConsole extends UnicastRemoteObject{
 		System.out.println("3- Procurar por contacto");
 		System.out.println("0- Sair");
 		switch (leTeclado.pedeNumero("Opção: ", 0, 3)) {
-			case 1: 
+			case 1: int numero = leTeclado.pedeNumero("Introduza o número: ", 9999999, 100000000);
+			try {
+				if(comunicacao.testeNCC(numero)) {
+					String nome = comunicacao.getNome(numero);
+					System.out.println(nome);
+				}
+				else
+					System.out.println("Utilizador não encontrado");
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}			
 				break;
 			case 2:
 				break;

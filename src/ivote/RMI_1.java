@@ -107,13 +107,13 @@ public interface RMI_1 extends Remote{
 	//tipo, nome, password, faculdade, departamento, telefone, morada, numeroCc, dataCc
 	 */
 	
-	public boolean getNCC (String nome_p,int telefone_p) throws RemoteException;// nº Cartao de Cidadao
+	public boolean getNCC (String nome_p,int telefone_p) throws RemoteException;  // nº Cartao de Cidadao
 	public boolean setNCC(int nCC, int novoNCC) throws RemoteException;
 	
 	public boolean getTipoP(int nCC)throws RemoteException;
 	public boolean setTipoP(int nCC, String n_tipo) throws RemoteException;
 	
-	public boolean getNome(int nCC)throws RemoteException;
+	public String getNome(int nCC)throws RemoteException;
 	public boolean setNome(int nCC, String n_nome) throws RemoteException;
 	
 	public boolean getPassword(int nCC)throws RemoteException;
@@ -143,7 +143,7 @@ public interface RMI_1 extends Remote{
 
 	//voto antecipado
 	public boolean votaAntecipadamente(int nCC, String passwordUser) throws RemoteException;
-	
+	f
 	
 	//Metodos para servidor TCP
 	//todas as comunicações terao de ser autenticadas por questao de seguranca
