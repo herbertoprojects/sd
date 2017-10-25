@@ -832,8 +832,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			Statement st = conn.createStatement();
 			String sql = "select count(*) from pessoa WHERE  numeroCc = '"+ncc+"'";
 			ResultSet rs = st.executeQuery(sql);
-			System.out.println("ALtera");
-			System.out.println("Novo");
 			rs.next();
 			contador = rs.getInt(1);
 			conn.close();
