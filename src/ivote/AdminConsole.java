@@ -68,17 +68,20 @@ public class AdminConsole extends UnicastRemoteObject{
 					
 					switch(option) {
 						case 1:
-						if (criaUser()) {
-							System.out.println("Utilzador adicionado!");
-						}
-						else {
-							System.out.println("Erro na criação de utilizador!");
-						}
-						leTeclado.leLinha("Continuar...");
-						break;
+							if (criaUser()) {
+								System.out.println("Utilzador adicionado!");
+							}
+							else {
+								System.out.println("Erro na criação de utilizador!");
+							}
+							leTeclado.leLinha("Continuar...");
+							break;
 						case 2:
+							
+							break;
 						case 3:
-						option = sc.nextInt();
+							System.out.println(1);
+							option = sc.nextInt();
 						break;
 					}
 			break;
