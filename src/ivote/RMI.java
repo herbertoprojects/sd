@@ -70,9 +70,9 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}*/
 
 	
-	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart) throws RemoteException, SQLException {
-		conn.setAutoCommit(false);
+	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart) throws RemoteException {
 		try {
+			conn.setAutoCommit(false);
 			int id_faculd = nmtoidFaculd(no_faculd);
 			int id_depart = nmtoidDepart(no_depart);
 			Statement st = conn.createStatement();
@@ -81,10 +81,20 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return "type : register , ok : true";
 		} catch (SQLException e) {
 			e.printStackTrace();
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return "type : register , ok : false";
 		} finally {
-			conn.setAutoCommit(true);
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
