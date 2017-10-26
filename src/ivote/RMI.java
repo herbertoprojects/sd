@@ -918,4 +918,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public ArrayList<String> ListDepartamentos(String faculdadeTemp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

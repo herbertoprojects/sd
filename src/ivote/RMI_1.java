@@ -171,5 +171,9 @@ public interface RMI_1 extends Remote{
 	//verificar se o user esta bloqueado a esta mesa de voto
 	//verificar se a password corresponde
 	//inserir o voto
+	
+	//lista de departamento dando a faculdade como string 
+	//fazer
+	public ArrayList<String> ListDepartamentos(String faculdadeTemp) throws RemoteException;
 	 
 }

@@ -5,6 +5,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 public class AdminConsole extends UnicastRemoteObject{
 	
@@ -337,6 +338,11 @@ public class AdminConsole extends UnicastRemoteObject{
 			if(comunicacao.testeNCC(tempNumero)) {
 				String nome = comunicacao.getNome(tempNumero);
 				System.out.println("Nome: "+nome);
+				System.out.println("1- Alterar");
+				System.out.println("0- voltar");
+				if(leTeclado.pedeNumero("Opção: ", 0, 1)==1) {
+					alteraUtilizador(tempNumero);
+				}
 				return true;
 			}
 			else {
@@ -352,6 +358,114 @@ public class AdminConsole extends UnicastRemoteObject{
 
 	}
 	
+	private void alteraUtilizador(int tempNumero) {
+		while(true) {
+			System.out.println("1- Alterar Nome");
+			System.out.println("2- Alterar Password");
+			System.out.println("3- Alterar Cargo");
+			System.out.println("4- Alterar Faculdade");
+			System.out.println("5- Alterar Departamento");
+			System.out.println("6- Altera Contacto");
+			System.out.println("7- Altera Morada");
+			System.out.println("8- Altera Data do Cartão de Cidadão");
+			System.out.println("0- Sair");
+			
+			switch (leTeclado.pedeNumero("Opção: ", 0, 8)) {
+			case 1:
+				try {
+					comunicacao.setNome(tempNumero, leTeclado.mudaString(comunicacao.getNome(tempNumero)));
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case 2:
+				try {
+					comunicacao.setPassword(tempNumero, leTeclado.mudaString(comunicacao.getPassword(tempNumero)));
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case 3:
+				try {
+					comunicacao.setTipoP(tempNumero, leTeclado.mudaListaString(comunicacao.getTipoP(tempNumero),"aluno;docente;funcionario"));
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			case 4:
+				try {
+				 	String listaTemp = "";
+					ArrayList <String> listaFaculdades1 = comunicacao.ListFaculdades();
+					for (String textoTemp:listaFaculdades1) {
+						if(listaTemp=="") {listaTemp = textoTemp;}
+						else {listaTemp = listaTemp+";"+textoTemp;}
+					}
+					
+					String faculdadeTemp = leTeclado.mudaListaString(comunicacao.getFacudade(tempNumero),listaTemp);
+					comunicacao.setFacudade(tempNumero, faculdadeTemp);
+					
+					listaTemp = "";
+					listaFaculdades1 = comunicacao.ListDepartamentos(faculdadeTemp);
+					for (String textoTemp:listaFaculdades1) {
+						if(listaTemp=="") {listaTemp = textoTemp;}
+						else {listaTemp = listaTemp+";"+textoTemp;}
+					}
+					
+					comunicacao.setDepartamento(tempNumero, leTeclado.mudaListaString(comunicacao.getDepartamento(tempNumero), listaTemp));
+					
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case 5:
+				try {
+					String listaTemp = "";
+					ArrayList <String> listaFaculdades = comunicacao.ListDepartamentos(comunicacao.getFacudade(tempNumero));
+					for (String textoTemp:listaFaculdades) {
+						if(listaTemp=="") {listaTemp = textoTemp;}
+						else {listaTemp = listaTemp+";"+textoTemp;}
+					}
+					comunicacao.setDepartamento(tempNumero, leTeclado.mudaListaString(comunicacao.getDepartamento(tempNumero), listaTemp));
+					
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case 6:
+				try {
+					comunicacao.setTelefone(tempNumero, leTeclado.mudaInt(comunicacao.getTelefone(tempNumero),99999999,1000000000));
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case 7:
+				try {
+					comunicacao.setMorada(tempNumero, leTeclado.mudaString(comunicacao.getMorada(tempNumero)));
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case 8:
+				try {
+					comunicacao.setDataCC(tempNumero, leTeclado.pedeData(comunicacao.getDataCC(tempNumero)));
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case 0:
+				return;
+			}
+		}
+		
+	}
+
 	public String tipoEleicao() {
 		System.out.println("Escolha o tipo de eleição:");
 		System.out.println("1- Núcleo de Estudantes");

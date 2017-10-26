@@ -100,4 +100,47 @@ public class getScanner {
 		return texto;
 	}
 	
+	public String mudaString(String texto) {
+		System.out.println("Anterior: "+ texto);
+		String texto1 = leLinha("Novo: ");
+		System.out.println("1- Confirmar");
+		System.out.println("0- Cancelar");
+		if(pedeNumero("Opção",0, 1)==1) {
+			return texto1;
+		}
+		else {
+			return texto;
+		}
+	}
+	
+	public int mudaInt(int num,int valor_inicial,int valor_final) {
+		System.out.println("Anterior: "+ num);
+		int num1 = pedeNumero("Novo: ",valor_inicial , valor_final);
+		System.out.println("1- Confirmar");
+		System.out.println("0- Cancelar");
+		if(pedeNumero("Opção",0, 1)==1) {
+			return num1;
+		}
+		else {
+			return num;
+		}
+	}
+	
+	//A lista é uma string separa por;
+	public String mudaListaString(String texto, String lista) {
+		System.out.println("Anterior: "+ texto);
+		System.out.println("");
+		String [] textos = lista.split(";");
+		for(int i = 0;i<texto.length();i++) {
+			System.out.println((i+1)+"- "+textos[0]);
+		}
+		System.out.println("0- Sair");
+		int opcao = pedeNumero("Opção: ", 0, textos.length);
+		if(opcao != 0) {
+			String texto1 = textos[opcao-1];
+		}
+		return texto;
+
+	}
+	
 }

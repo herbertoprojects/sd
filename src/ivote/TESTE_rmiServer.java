@@ -378,4 +378,11 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 		return false;
 	}
 
+	@Override
+	public ArrayList<String> ListDepartamentos(String faculdadeTemp)
+			throws RemoteException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
