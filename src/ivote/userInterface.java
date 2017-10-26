@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class userInterface extends Thread {
 	
-	public RMIRemoteInterface comunicacaoRMI;
+	public RMI_1 comunicacaoRMI;
 	public String username = "";
 	public String password = "";
 	public LocalDateTime data_ligado;
@@ -15,7 +15,7 @@ public class userInterface extends Thread {
 	public getScanner leitorTeclado = new getScanner();
 	
 	
-	public userInterface(RMIRemoteInterface comunicacaoRMI) {
+	public userInterface(RMI_1 comunicacaoRMI) {
 		// TODO Auto-generated constructor stub
 		this.comunicacaoRMI = comunicacaoRMI;
 		this.start();

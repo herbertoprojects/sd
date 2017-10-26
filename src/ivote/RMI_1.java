@@ -152,7 +152,7 @@ public interface RMI_1 extends Remote{
 	//-Votar
 	//-Desbloquear Voto
 	//-Votar antecipadamente
-	
+	*/
 	public boolean ligarServidor(String nomeMesaVoto,String passwordMesaVoto) throws RemoteException;
 	public boolean desligarServidor(String nomeMesaVoto,String passwordMesaVoto) throws RemoteException;
 	
@@ -167,9 +167,9 @@ public interface RMI_1 extends Remote{
 	//verificar se o user está bloqueado a esta mesa de voto
 	//verificar se a password corresponde
 	
-	public boolean votar(String nomeMesaVoto,String passwordMesaVoto, int nCC, String passwordUser) throws RemoteException;
+	public boolean votar(String nomeMesaVoto,String passwordMesaVoto, int nCC, String passwordUser, int voto) throws RemoteException;
 	//verificar se o user esta bloqueado a esta mesa de voto
 	//verificar se a password corresponde
 	//inserir o voto
-	 */
+	 
 }

@@ -879,4 +879,43 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return false;
 		}
 	}
+
+	@Override
+	public boolean ligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean desligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean desbloquearUser(String nomeMesaVoto, String passwordMesaVoto, int nCC) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean desbloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean bloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int voto)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
