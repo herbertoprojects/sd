@@ -132,6 +132,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 	}
 	
+	
 	public void menuFac() {
 		while(true) {
 		 	System.out.println("------------Sub Menu das Faculdades------------");
