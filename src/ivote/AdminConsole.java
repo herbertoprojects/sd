@@ -263,10 +263,28 @@ public class AdminConsole extends UnicastRemoteObject{
 				String moradaTemp = leTeclado.leLinha("Morada: ");									//morada
 				
 				String dataccTemp = leTeclado.pedeData("Data cartão cidadão: ");					//Data CC
-			
-				String facTemp = pedeFac();															//faculdade
-				String depTemp = pedeDep(facTemp);
-				String cargoTemp = "";
+				
+				
+				String listaTemp = "";
+				ArrayList <String> listaFaculdades1 = comunicacao.ListFaculdades();
+				for (String textoTemp:listaFaculdades1) {
+					if(listaTemp=="") {listaTemp = textoTemp;}
+					else {listaTemp = listaTemp+";"+textoTemp;}
+				}
+				
+				
+				String facTemp = leTeclado.mudaListaString("Faculdade: ", listaTemp);				//faculdade
+				
+				listaTemp = "";
+				listaFaculdades1 = comunicacao.ListDepartamentos(facTemp);
+				for (String textoTemp:listaFaculdades1) {
+					if(listaTemp=="") {listaTemp = textoTemp;}
+					else {listaTemp = listaTemp+";"+textoTemp;}
+				}
+				
+				String depTemp = leTeclado.mudaListaString("Departamento: ", listaTemp);
+				
+				String cargoTemp = leTeclado.mudaListaString("Cargo: ","aluno;docente;funcionario");
 				
 				//cargo
 				System.out.println("1- Aluno");
@@ -322,6 +340,9 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	public String pedeFac() {
+		
+		
+		
 		return "";
 		
 	}
@@ -375,7 +396,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setNome(tempNumero, leTeclado.mudaString(comunicacao.getNome(tempNumero)));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -383,7 +403,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setPassword(tempNumero, leTeclado.mudaString(comunicacao.getPassword(tempNumero)));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -391,7 +410,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setTipoP(tempNumero, leTeclado.mudaListaString(comunicacao.getTipoP(tempNumero),"aluno;docente;funcionario"));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			case 4:
@@ -431,7 +449,6 @@ public class AdminConsole extends UnicastRemoteObject{
 					comunicacao.setDepartamento(tempNumero, leTeclado.mudaListaString(comunicacao.getDepartamento(tempNumero), listaTemp));
 					
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -439,7 +456,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setTelefone(tempNumero, leTeclado.mudaInt(comunicacao.getTelefone(tempNumero),99999999,1000000000));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -447,7 +463,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setMorada(tempNumero, leTeclado.mudaString(comunicacao.getMorada(tempNumero)));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -455,7 +470,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setDataCC(tempNumero, leTeclado.pedeData(comunicacao.getDataCC(tempNumero)));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -525,6 +539,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		}	
 		return false;
 	}
+	
 	
 	public boolean consultaDep() {
 		

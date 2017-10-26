@@ -105,7 +105,7 @@ public class getScanner {
 		String texto1 = leLinha("Novo: ");
 		System.out.println("1- Confirmar");
 		System.out.println("0- Cancelar");
-		if(pedeNumero("Opção",0, 1)==1) {
+		if(pedeNumero("Opção: ",0, 1)==1) {
 			return texto1;
 		}
 		else {
@@ -118,7 +118,7 @@ public class getScanner {
 		int num1 = pedeNumero("Novo: ",valor_inicial , valor_final);
 		System.out.println("1- Confirmar");
 		System.out.println("0- Cancelar");
-		if(pedeNumero("Opção",0, 1)==1) {
+		if(pedeNumero("Opção: ",0, 1)==1) {
 			return num1;
 		}
 		else {
@@ -128,7 +128,7 @@ public class getScanner {
 	
 	//A lista é uma string separa por;
 	public String mudaListaString(String texto, String lista) {
-		System.out.println("Anterior: "+ texto);
+		System.out.println(texto);
 		System.out.println("");
 		String [] textos = lista.split(";");
 		for(int i = 0;i<texto.length();i++) {
