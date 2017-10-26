@@ -152,6 +152,7 @@ public class threadClienteTCP extends Thread {
 				if(terminalAssociado.comunicacao.desbloquearVoto(terminalAssociado.nome, terminalAssociado.password,terminalAssociado.nccCLiente, terminalAssociado.passCliente)) {
 					terminalAssociado.vote = true;
 				}
+				
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
