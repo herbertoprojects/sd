@@ -375,7 +375,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setNome(tempNumero, leTeclado.mudaString(comunicacao.getNome(tempNumero)));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -383,7 +382,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setPassword(tempNumero, leTeclado.mudaString(comunicacao.getPassword(tempNumero)));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -391,7 +389,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setTipoP(tempNumero, leTeclado.mudaListaString(comunicacao.getTipoP(tempNumero),"aluno;docente;funcionario"));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			case 4:
@@ -431,7 +428,6 @@ public class AdminConsole extends UnicastRemoteObject{
 					comunicacao.setDepartamento(tempNumero, leTeclado.mudaListaString(comunicacao.getDepartamento(tempNumero), listaTemp));
 					
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -439,7 +435,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setTelefone(tempNumero, leTeclado.mudaInt(comunicacao.getTelefone(tempNumero),99999999,1000000000));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -447,7 +442,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setMorada(tempNumero, leTeclado.mudaString(comunicacao.getMorada(tempNumero)));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -455,7 +449,6 @@ public class AdminConsole extends UnicastRemoteObject{
 				try {
 					comunicacao.setDataCC(tempNumero, leTeclado.pedeData(comunicacao.getDataCC(tempNumero)));
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
@@ -525,6 +518,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		}	
 		return false;
 	}
+	
 	
 	public boolean consultaDep() {
 		
