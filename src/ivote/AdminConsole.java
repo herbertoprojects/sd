@@ -171,6 +171,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		}
 	}
 	
+	
 	private boolean consultaFac() {
 		
 		try {
