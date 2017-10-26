@@ -1,6 +1,7 @@
 package ivote;
 import java.util.*;
 import java.rmi.*;
+import java.sql.*;
 
 public interface RMI_1 extends Remote{
 	
@@ -17,35 +18,35 @@ public interface RMI_1 extends Remote{
 	// String departamento - nome do departamento
 	// int telefone - numero de telefone
 	
-	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart) throws RemoteException;
-	public boolean removerUtilizador(int NCC) throws RemoteException;
-	public ArrayList <String> ListDepartamentos(int id_faculd) throws RemoteException;//retorna a lista de departamentos de uma faculdade
-	public ArrayList <String> ListFaculdades() throws RemoteException;
-	public boolean testeNCC(int ncc) throws RemoteException;
+	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart) throws RemoteException, SQLException;
+	public boolean removerUtilizador(int NCC) throws RemoteException, SQLException;
+	public ArrayList <String> ListDepartamentos(int id_faculd) throws RemoteException, SQLException;//retorna a lista de departamentos de uma faculdade
+	public ArrayList <String> ListFaculdades() throws RemoteException, SQLException;
+	public boolean testeNCC(int ncc) throws RemoteException, SQLException;
 	
 	
 	//Gerir departamentos
-	public boolean addDepartamento(String sigla, String nomeDepart, int id_dep, int id_fac)throws RemoteException;
-	public boolean removeDepartamento(int id_dep, int id_fac)throws RemoteException;
+	public boolean addDepartamento(String sigla, String nomeDepart, int id_dep, int id_fac)throws RemoteException, SQLException;
+	public boolean removeDepartamento(int id_dep, int id_fac)throws RemoteException, SQLException;
 	
 	
 	//Gerir faculdades
-	public boolean addFaculdade(String sigla, String nomeFaculd, int id)throws RemoteException;
-	public boolean removeFaculdade(int id)throws RemoteException;
+	public boolean addFaculdade(String sigla, String nomeFaculd, int id)throws RemoteException, SQLException;
+	public boolean removeFaculdade(int id)throws RemoteException, SQLException;
 	
 	
 	
 	//Criar eleição; Tipo->núcleo de estudantes, conselho geral, direção de departamento, direção de faculdade
 	//tipo de eleição -> NEstudante CGeral DDepartamento DFaculdade
-	public String criaEleicao(String tipo, String inicio, String fim, String titulo, String descricao, int id) throws RemoteException; // retorna o número da eleição
-	public ArrayList <String> listEleicao(String inicio, String fim) throws RemoteException;//pesquisa num intervalo de tempo, para pesquisar todas deixar a null
-	public ArrayList <String> listEleicao() throws RemoteException;
+	public String criaEleicao(String tipo, String inicio, String fim, String titulo, String descricao, int id) throws RemoteException, SQLException; // retorna o número da eleição
+	public ArrayList <String> listEleicao(String inicio, String fim) throws RemoteException, SQLException;//pesquisa num intervalo de tempo, para pesquisar todas deixar a null
+	public ArrayList <String> listEleicao() throws RemoteException, SQLException;
 	
 
 	//Gerir listas de candidatos a uma eleição
-	public String addListaCandidatos(int id, int id_eleicao, String membro1, String membro2, String membro3, String membro4, String membro5) throws RemoteException;
-	public boolean removeListaCandidatos(int id_LC) throws RemoteException;
-	public ArrayList <String> listListasCandidatos(int id_elei)throws RemoteException;
+	public String addListaCandidatos(int id, int id_eleicao, String membro1, String membro2, String membro3, String membro4, String membro5) throws RemoteException, SQLException;
+	public boolean removeListaCandidatos(int id_LC) throws RemoteException, SQLException;
+	public ArrayList <String> listListasCandidatos(int id_elei)throws RemoteException, SQLException;
 	
 	/*
 	public boolean addCandidato(String Eleicao,String lista)throws RemoteException;
@@ -54,11 +55,11 @@ public interface RMI_1 extends Remote{
 	*/
 	
 	//Gerir mesas de voto
-	public String addMesaVoto(int id, int id_depart, int id_faculd, int id_elei, String user, String pass) throws RemoteException;
-	public String addMesaVoto(int id, int id_faculd, int id_elei, String user, String pass) throws RemoteException;
-	public boolean removeMesaVoto(int id_MV) throws RemoteException;
-	public ArrayList <String> listMesaVoto(int id_elei) throws RemoteException;
-	public ArrayList <String> listMesaVoto() throws RemoteException;
+	public String addMesaVoto(int id, int id_depart, int id_faculd, int id_elei, String user, String pass) throws RemoteException, SQLException;
+	public String addMesaVoto(int id, int id_faculd, int id_elei, String user, String pass) throws RemoteException, SQLException;
+	public boolean removeMesaVoto(int id_MV) throws RemoteException, SQLException;
+	public ArrayList <String> listMesaVoto(int id_elei) throws RemoteException, SQLException;
+	public ArrayList <String> listMesaVoto() throws RemoteException, SQLException;
 	
 	
 	//Alterar propriedades de uma eleição
@@ -66,19 +67,19 @@ public interface RMI_1 extends Remote{
 	public String detalheEleicao(String eleicao) throws RemoteException;
 	*/
 	
-	public boolean getTipo(int id_elei) throws RemoteException;
-	public boolean setTipo(int id_elei, String n_tipo) throws RemoteException;
+	public String getTipo(int id_elei) throws RemoteException, SQLException;
+	public boolean setTipo(int id_elei, String n_tipo) throws RemoteException, SQLException;
 	
-	public boolean getDataInicio(int id_elei) throws RemoteException;
-	public boolean getDataFim(int id_elei) throws RemoteException;
-	public boolean setDataInicio(String d_inicio, int id_elei) throws RemoteException;
-	public boolean setDataFim(String d_fim, int id_elei) throws RemoteException;
+	public String getDataInicio(int id_elei) throws RemoteException, SQLException;
+	public String getDataFim(int id_elei) throws RemoteException, SQLException;
+	public boolean setDataInicio(String d_inicio, int id_elei) throws RemoteException, SQLException;
+	public boolean setDataFim(String d_fim, int id_elei) throws RemoteException, SQLException;
 	
-	public boolean getTitulo(int id_elei) throws RemoteException;
-	public boolean setTitulo(String n_titulo,int id_elei) throws RemoteException;
+	public String getTitulo(int id_elei) throws RemoteException, SQLException;
+	public boolean setTitulo(String n_titulo,int id_elei) throws RemoteException, SQLException;
 	
-	public boolean getDescricao(int id_elei) throws RemoteException;
-	public boolean setDescricao(String n_descricao, int id_elei) throws RemoteException;
+	public String getDescricao(int id_elei) throws RemoteException, SQLException;
+	public boolean setDescricao(String n_descricao, int id_elei) throws RemoteException, SQLException;
 	
 	/*
 	//Saber em que local votou cada eleitor
@@ -108,38 +109,38 @@ public interface RMI_1 extends Remote{
 	//tipo, nome, password, faculdade, departamento, telefone, morada, numeroCc, dataCc
 	 */
 	
-	public int getNCC (String nome_p,int telefone_p) throws RemoteException;// nº Cartao de Cidadao
-	public boolean setNCC(int nCC, int novoNCC) throws RemoteException;
+	public int getNCC (String nome_p,int telefone_p) throws RemoteException, SQLException;// nº Cartao de Cidadao
+	public boolean setNCC(int nCC, int novoNCC) throws RemoteException, SQLException;
 	
-	public String getTipoP(int nCC)throws RemoteException;
-	public boolean setTipoP(int nCC, String n_tipo) throws RemoteException;
+	public String getTipoP(int nCC)throws RemoteException, SQLException;
+	public boolean setTipoP(int nCC, String n_tipo) throws RemoteException, SQLException;
 	
-	public String getNome(int nCC)throws RemoteException;
-	public boolean setNome(int nCC, String n_nome) throws RemoteException;
+	public String getNome(int nCC)throws RemoteException, SQLException;
+	public boolean setNome(int nCC, String n_nome) throws RemoteException, SQLException;
 	
-	public String getPassword(int nCC)throws RemoteException;
-	public boolean setPassword(int nCC, String n_password) throws RemoteException;
+	public String getPassword(int nCC)throws RemoteException, SQLException;
+	public boolean setPassword(int nCC, String n_password) throws RemoteException, SQLException;
 	
-	public String getFacudade(int nCC)throws RemoteException;
-	public boolean setFacudade(int nCC, String n_faculdade) throws RemoteException;
+	public String getFacudade(int nCC)throws RemoteException, SQLException;
+	public boolean setFacudade(int nCC, String n_faculdade) throws RemoteException, SQLException;
 	
-	public String getDepartamento(int nCC)throws RemoteException;
-	public boolean setDepartamento(int nCC, String n_departamento) throws RemoteException;
+	public String getDepartamento(int nCC)throws RemoteException, SQLException;
+	public boolean setDepartamento(int nCC, String n_departamento) throws RemoteException, SQLException;
 	
-	public int getTelefone(int nCC)throws RemoteException;
-	public boolean setTelefone(int nCC, int n_telefone) throws RemoteException;
+	public int getTelefone(int nCC)throws RemoteException, SQLException;
+	public boolean setTelefone(int nCC, int n_telefone) throws RemoteException, SQLException;
 	
-	public String getMorada(int nCC)throws RemoteException;
-	public boolean setMorada(int nCC, String n_morada) throws RemoteException;
+	public String getMorada(int nCC)throws RemoteException, SQLException;
+	public boolean setMorada(int nCC, String n_morada) throws RemoteException, SQLException;
 	
-	public String getDataCC(int nCC)throws RemoteException;
-	public boolean setDataCC(int nCC, String n_data) throws RemoteException;
+	public String getDataCC(int nCC)throws RemoteException, SQLException;
+	public boolean setDataCC(int nCC, String n_data) throws RemoteException, SQLException;
 	
 	
 	
 	//Gerir membros de cada mesa de voto
-	public String addMembrosMesaVoto(int mesaVoto,int nCC1, int nCC2, int nCC3) throws RemoteException;
-	public String removeMembroMesaVoto(int mesaVoto) throws RemoteException;
+	public String addMembrosMesaVoto(int mesaVoto,int nCC1, int nCC2, int nCC3) throws RemoteException, SQLException;
+	public String removeMembroMesaVoto(int mesaVoto) throws RemoteException, SQLException;
 	/*
 	public ArrayList <String> listaMembrosMesaVoto(String mesaVoto) throws RemoteException;
 
