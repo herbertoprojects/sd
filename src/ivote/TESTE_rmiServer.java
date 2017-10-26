@@ -160,9 +160,9 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 	}
 
 	@Override
-	public boolean getTipo(int id_elei) throws RemoteException {
+	public String getTipo(int id_elei) throws RemoteException {
 		// TODO Auto-generated method stub
-		return false;
+		return "";
 	}
 
 	@Override
@@ -172,15 +172,15 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 	}
 
 	@Override
-	public boolean getDataInicio(int id_elei) throws RemoteException {
+	public String getDataInicio(int id_elei) throws RemoteException {
 		// TODO Auto-generated method stub
-		return false;
+		return "";
 	}
 
 	@Override
-	public boolean getDataFim(int id_elei) throws RemoteException {
+	public String getDataFim(int id_elei) throws RemoteException {
 		// TODO Auto-generated method stub
-		return false;
+		return "";
 	}
 
 	@Override
@@ -196,9 +196,9 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 	}
 
 	@Override
-	public boolean getTitulo(int id_elei) throws RemoteException {
+	public String getTitulo(int id_elei) throws RemoteException {
 		// TODO Auto-generated method stub
-		return false;
+		return "";
 	}
 
 	@Override
@@ -208,9 +208,9 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 	}
 
 	@Override
-	public boolean getDescricao(int id_elei) throws RemoteException {
+	public String getDescricao(int id_elei) throws RemoteException {
 		// TODO Auto-generated method stub
-		return false;
+		return "";
 	}
 
 	@Override
@@ -335,6 +335,51 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 
 	@Override
 	public String removeMembroMesaVoto(int mesaVoto) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean ligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean desligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean desbloquearUser(String nomeMesaVoto, String passwordMesaVoto, int nCC) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean desbloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean bloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int voto)
+			throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ArrayList<String> ListDepartamentos(String faculdadeTemp) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}

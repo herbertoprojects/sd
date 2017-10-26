@@ -15,7 +15,7 @@ public class ServerTCP extends UnicastRemoteObject{
 	/**
 	 * 
 	 */
-	public RMIRemoteInterface comunicacaoRMI;
+	public RMI_1 comunicacaoRMI;
 	public ServerSocket server;
 	public getOptions opcoes;
 	
@@ -56,7 +56,7 @@ public class ServerTCP extends UnicastRemoteObject{
 	}
 	public void ativaConnectionRMI() {
 		try {
-			comunicacaoRMI = (RMIRemoteInterface) Naming.lookup("rmi://"+opcoes.ipRmiServer+":"+opcoes.portRmiServer+"/DepartamentoInformatica");
+			comunicacaoRMI = (RMI_1) Naming.lookup("rmi://"+opcoes.ipRmiServer+":"+opcoes.portRmiServer+"/DepartamentoInformatica");
 		}catch (Exception e) {
 			System.out.println("Exception in main: " + e);
 			//e.printStackTrace();
