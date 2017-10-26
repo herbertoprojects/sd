@@ -33,7 +33,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			
 			try {
 				primario(portaRMI);
-				
 				rmi = (RMI_1) Naming.lookup("rmi://"+args[0]+":"+portaRMI+"/rmi");
 				System.out.println("Primário ligado!");
 			} catch (MalformedURLException e1) {
@@ -58,7 +57,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "proj", "proj");
 			System.out.println("Conectado há base de dados"+conn);
-			conn.setAutoCommit(false);
 		} catch(RemoteException | MalformedURLException | SQLException  | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -72,22 +70,26 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}*/
 
 	
-	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart){
+	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			int id_faculd = nmtoidFaculd(no_faculd);
 			int id_depart = nmtoidDepart(no_depart);
 			Statement st = conn.createStatement();
-			//System.out.println("'"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd')), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', '"+id_depart+"')");
 			st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', '"+id_depart+"')");
 			conn.commit();
 			return "type : register , ok : true";
-		} catch (SQLException | RemoteException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return "type : register , ok : false";
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public boolean removerUtilizador(int NCC) throws RemoteException {
+	public boolean removerUtilizador(int NCC) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Delete from pessoa where numeroCc = ('"+NCC+"')");
@@ -95,13 +97,16 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Olá");
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 
-	public ArrayList <String> ListFaculdades() throws RemoteException {
+	public ArrayList <String> ListFaculdades() throws RemoteException, SQLException {
 		ArrayList<String> faculdades = new ArrayList<String>();
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select * from faculdade";
@@ -109,15 +114,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			while (rs.next()) {
 			    faculdades.add(rs.getString(1)+" - "+rs.getString(2)+" - "+rs.getInt(3));
 			}
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return faculdades;
 	}
 	
-	public ArrayList <String> ListDepartamentos(int id_faculd) throws RemoteException {
+	public ArrayList <String> ListDepartamentos(int id_faculd) throws RemoteException, SQLException {
 		ArrayList<String> departamentos = new ArrayList<String>();
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select * from departamento where id_faculd = ('"+id_faculd+"')";
@@ -125,14 +134,18 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			while (rs.next()) {
 			    departamentos.add(rs.getString(1)+" - "+rs.getString(2)+" - "+rs.getInt(3));
 			}
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return departamentos;
 	}
 	
-	public boolean addDepartamento(String sigla,String nomeDepart, int id, int id_faculd)throws RemoteException {
+	public boolean addDepartamento(String sigla,String nomeDepart, int id, int id_faculd)throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Insert into departamento values ('"+sigla+"', '"+nomeDepart+"', '"+id+"', '"+id_faculd+"')");
@@ -140,11 +153,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public boolean removeDepartamento(int id_depart, int id_faculd)throws RemoteException {
+	public boolean removeDepartamento(int id_depart, int id_faculd)throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Delete from departamento where id = ('"+id_depart+"') and id_faculd = ('"+id_faculd+"')");
@@ -152,11 +169,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public boolean addFaculdade(String sigla, String nomeFaculd, int id)throws RemoteException {
+	public boolean addFaculdade(String sigla, String nomeFaculd, int id)throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Insert into faculdade values ('"+sigla+"', '"+nomeFaculd+"', '"+id+"')");
@@ -164,11 +185,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public boolean removeFaculdade(int id_faculd)throws RemoteException {
+	public boolean removeFaculdade(int id_faculd)throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Delete from faculdade where id = ('"+id_faculd+"')");
@@ -176,11 +201,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public String criaEleicao(String tipo, String inicio, String fim, String titulo, String descricao, int id) throws RemoteException {
+	public String criaEleicao(String tipo, String inicio, String fim, String titulo, String descricao, int id) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Insert into eleicao values ('"+tipo+"', to_date('"+inicio+"','yyyy/mm/dd hh:mi'), to_date('"+fim+"','yyyy/mm/dd hh:mi'), '"+titulo+"', '"+descricao+"', '"+id+"')");
@@ -188,12 +217,16 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return "type : create_election , ok : true";
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return "type : create_election , ok : false";
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public ArrayList <String> listEleicao(String inicioE, String fimE) throws RemoteException {
+	public ArrayList <String> listEleicao(String inicioE, String fimE) throws RemoteException, SQLException {
 		ArrayList<String> eleicoes = new ArrayList<String>();
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select * from eleicao where dataInicio >= ('"+inicioE+"') and dataFim <= ('"+fimE+"')";
@@ -201,15 +234,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			while (rs.next()) {
 			    eleicoes.add(rs.getString(1)+" - "+rs.getDate(2)+" - "+rs.getDate(3)+" - "+rs.getString(4)+" - "+rs.getString(5)+" - "+rs.getInt(6));
 			}
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return eleicoes;
 	}
 	
-	public ArrayList <String> listEleicao() throws RemoteException {
+	public ArrayList <String> listEleicao() throws RemoteException, SQLException {
 		ArrayList<String> eleicoes = new ArrayList<String>();
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select * from eleicao";
@@ -217,14 +254,18 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			while (rs.next()) {
 			    eleicoes.add(rs.getString(1)+" - "+rs.getDate(2)+" - "+rs.getDate(3)+" - "+rs.getString(4)+" - "+rs.getString(5)+" - "+rs.getInt(6));
 			}
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return eleicoes;
 	}
 	
-	public String addListaCandidatos(int id, int id_eleicao, String membro1, String membro2, String membro3, String membro4, String membro5) throws RemoteException {
+	public String addListaCandidatos(int id, int id_eleicao, String membro1, String membro2, String membro3, String membro4, String membro5) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Insert into pessoasLista values ('"+id+"', '"+id_eleicao+"', '"+membro1+"', '"+membro2+"', '"+membro3+"', '"+membro4+"', '"+membro5+"')");
@@ -232,11 +273,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return "type : add_peopleList , ok : true";
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return "type : add_peopleList , ok : false";
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public boolean removeListaCandidatos(int id_LC) throws RemoteException {
+	public boolean removeListaCandidatos(int id_LC) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Delete from pessoasLista where id = ('"+id_LC+"')");
@@ -244,13 +289,17 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
 	//depois ter em atenção o tipo de eleição!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public ArrayList <String> listListasCandidatos(int id_elei) throws RemoteException {
+	public ArrayList <String> listListasCandidatos(int id_elei) throws RemoteException, SQLException {
 		ArrayList<String> candidatos = new ArrayList<String>();
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select * from pessoaslista where id_eleicao = ('"+id_elei+"')";
@@ -258,9 +307,12 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			while (rs.next()) {
 			    candidatos.add(rs.getInt(1)+" - "+rs.getInt(2)+" - "+rs.getString(3)+" - "+rs.getString(4)+" - "+rs.getString(5)+" - "+rs.getString(6)+" - "+rs.getString(7));
 			}
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return candidatos;
 	}
@@ -282,7 +334,8 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	
 	
 	//Em falta String user, String pass!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public String addMesaVoto(int id, int id_depart, int id_faculd, int id_elei, String user, String pass) throws RemoteException {
+	public String addMesaVoto(int id, int id_depart, int id_faculd, int id_elei, String user, String pass) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Insert into mesavoto(id, id_depart, id_faculd, id_eleicao, usern, pass) values ('"+id+"', '"+id_depart+"', '"+id_faculd+"', '"+id_elei+"', '"+user+"', '"+pass+"')");
@@ -290,11 +343,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return "type : add_voteTable , ok : true";
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return "type : add_voteTable , ok : false";
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public String addMesaVoto(int id, int id_faculd, int id_elei, String user, String pass) throws RemoteException {
+	public String addMesaVoto(int id, int id_faculd, int id_elei, String user, String pass) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Insert into mesavoto() values ('"+id+"', null, '"+id_faculd+"', '"+id_elei+"', '"+user+"', '"+pass+"')");
@@ -302,11 +359,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return "type : add_voteTable , ok : true";
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return "type : add_voteTable , ok : false";
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public boolean removeMesaVoto(int id_MV) throws RemoteException {
+	public boolean removeMesaVoto(int id_MV) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			st.executeUpdate("Delete from mesavoto where id = ('"+id_MV+"')");
@@ -314,12 +375,16 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public ArrayList <String> listMesaVoto(int id_elei) throws RemoteException {
+	public ArrayList <String> listMesaVoto(int id_elei) throws RemoteException, SQLException {
 		ArrayList<String> mesas = new ArrayList<String>();
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select * from mesavoto where id_eleicao = ('"+id_elei+"')";
@@ -327,15 +392,19 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			while (rs.next()) {
 			    mesas.add(rs.getInt(1)+" - "+rs.getInt(2)+" - "+rs.getInt(3)+" - "+rs.getInt(4));
 			}
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return mesas;
 	}
 	
-	public ArrayList <String> listMesaVoto() throws RemoteException {
+	public ArrayList <String> listMesaVoto() throws RemoteException, SQLException {
 		ArrayList<String> mesas = new ArrayList<String>();
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select * from mesavoto";
@@ -343,9 +412,12 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			while (rs.next()) {
 			    mesas.add(rs.getInt(1)+" - "+rs.getInt(2)+" - "+rs.getInt(3)+" - "+rs.getInt(4));
 			}
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return mesas;
 	}
@@ -354,25 +426,29 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	public String detalheEleicao(String eleicao) throws RemoteException {
 		
 	}
+	
 	*/
 	
-	public boolean getTipo(int id_elei) throws RemoteException {
+	public String getTipo(int id_elei) throws RemoteException, SQLException {
+		String tipo = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select tipo from eleicao where id = ('"+id_elei+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
-			conn.close();
-			return true;
+			rs.next();
+			tipo = rs.getString(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			conn.rollback();
+		} finally {
+			conn.setAutoCommit(true);
 		}
+		return tipo;
 	}
 	
-	public boolean setTipo(int id_elei, String n_tipo) throws RemoteException {
+	public boolean setTipo(int id_elei, String n_tipo) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update eleicao set tipo = ('"+n_tipo+"') where id = ('"+id_elei+"')");
 			st.executeUpdate();
@@ -380,43 +456,51 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 
-	public boolean getDataInicio(int id_elei) throws RemoteException {
+	public String getDataInicio(int id_elei) throws RemoteException, SQLException {
+		String dataI = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select datainicio from eleicao where id = ('"+id_elei+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getDate(1)));
-			}
-			conn.close();
-			return true;
+			rs.next();
+			dataI = rs.getString(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			conn.rollback();
+		} finally {
+			conn.setAutoCommit(true);
 		}
+		return dataI;
 	}
 	
-	public boolean getDataFim(int id_elei) throws RemoteException {
+	public String getDataFim(int id_elei) throws RemoteException, SQLException {
+		String dataF = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select datafim from eleicao where id = ('"+id_elei+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getDate(1)));
-			}
-			conn.close();
-			return true;
+			rs.next();
+			dataF = rs.getString(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			conn.rollback();
+		} finally {
+			conn.setAutoCommit(true);
 		}
+		return dataF;
 	}
 	
-	public boolean setDataInicio(String d_inicio, int id_elei) throws RemoteException {
+	public boolean setDataInicio(String d_inicio, int id_elei) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update eleicao set datainicio = ('"+d_inicio+"') where id = ('"+id_elei+"')");
 			st.executeUpdate();
@@ -424,11 +508,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public boolean setDataFim(String d_fim, int id_elei) throws RemoteException {
+	public boolean setDataFim(String d_fim, int id_elei) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update eleicao set datafim = ('"+d_fim+"') where id = ('"+id_elei+"')");
 			st.executeUpdate();
@@ -436,27 +524,33 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public boolean getTitulo(int id_elei) throws RemoteException {
+	public String getTitulo(int id_elei) throws RemoteException, SQLException {
+		String title = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select titulo from eleicao where id = ('"+id_elei+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
-			conn.close();
-			return true;
+			rs.next();
+			title = rs.getString(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			conn.rollback();
+		} finally {
+			conn.setAutoCommit(true);
 		}
+		return title;
 	}
 	
-	public boolean setTitulo(String n_titulo,int id_elei) throws RemoteException {
+	public boolean setTitulo(String n_titulo,int id_elei) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update eleicao set titulo = ('"+n_titulo+"') where id = ('"+id_elei+"')");
 			st.executeUpdate();
@@ -464,27 +558,33 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public boolean getDescricao(int id_elei) throws RemoteException {
+	public String getDescricao(int id_elei) throws RemoteException, SQLException {
+		String mora = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select descricao from eleicao where id = ('"+id_elei+"')";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			    System.out.println((rs.getString(1)));
-			}
-			conn.close();
-			return true;
+			rs.next();
+			mora = rs.getString(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			conn.rollback();
+		} finally {
+			conn.setAutoCommit(true);
 		}
+		return mora;
 	}
 	
-	public boolean setDescricao(String n_descricao, int id_elei) throws RemoteException {
+	public boolean setDescricao(String n_descricao, int id_elei) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update eleicao set descricao = ('"+n_descricao+"') where id = ('"+id_elei+"')");
 			st.executeUpdate();
@@ -492,7 +592,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
@@ -514,38 +617,27 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 	*/
 	
-	public int getNCC (String nome_p,int telefone_p) throws RemoteException {
+	public int getNCC (String nome_p,int telefone_p) throws RemoteException, SQLException {
 		int numCC = 0;
+		conn.setAutoCommit(false);
 		try {
-			conn.setAutoCommit(false);
 			Statement st = conn.createStatement();
 			String sql = "select numeroCc from pessoa where nome = ('"+nome_p+"') and telefone = ('"+telefone_p+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			numCC = rs.getInt(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				System.out.println("lost connection db");
-			}
+			conn.rollback();
+			throw e;
 		} finally {
-			try {
-				conn.setAutoCommit(true);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println();
-			}
+			conn.setAutoCommit(true);
 		}
 		return numCC;
 	}
 	
-	public boolean setNCC(int nCC, int novoNCC) throws RemoteException {
+	public boolean setNCC(int nCC, int novoNCC) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update pessoa set numeroCc = ('"+novoNCC+"') where numeroCc = ('"+nCC+"')");
 			st.executeUpdate();
@@ -553,26 +645,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public String getTipoP(int nCC)throws RemoteException {
+	public String getTipoP(int nCC)throws RemoteException, SQLException {
 		String tipo = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select tipo from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			tipo = rs.getString(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return tipo;
 	}
 	
-	public boolean setTipoP(int nCC, String n_tipo) throws RemoteException {
+	public boolean setTipoP(int nCC, String n_tipo) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update pessoa set tipo = ('"+n_tipo+"') where numeroCc = ('"+nCC+"')");
 			st.executeUpdate();
@@ -580,26 +680,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public String getNome(int nCC)throws RemoteException {
+	public String getNome(int nCC)throws RemoteException, SQLException {
 		String n_nome = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select nome from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			n_nome = rs.getString(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return n_nome;
 	}
 	
-	public boolean setNome(int nCC, String n_nome) throws RemoteException {
+	public boolean setNome(int nCC, String n_nome) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update pessoa set nome = ('"+n_nome+"') where numeroCc = ('"+nCC+"')");
 			st.executeUpdate();
@@ -607,26 +715,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public String getPassword(int nCC)throws RemoteException {
+	public String getPassword(int nCC)throws RemoteException, SQLException {
 		String n_pass = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select password from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			n_pass = rs.getString(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return n_pass;
 	}
 	
-	public boolean setPassword(int nCC, String n_password) throws RemoteException {
+	public boolean setPassword(int nCC, String n_password) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update pessoa set password = ('"+n_password+"') where numeroCc = ('"+nCC+"')");
 			st.executeUpdate();
@@ -634,26 +750,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public String getFacudade(int nCC)throws RemoteException {
+	public String getFacudade(int nCC)throws RemoteException, SQLException {
 		String n_facul = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select faculdade from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			n_facul = rs.getString(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return n_facul;
 	}
 	
-	public boolean setFacudade(int nCC, String n_faculdade) throws RemoteException {
+	public boolean setFacudade(int nCC, String n_faculdade) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update pessoa set faculdade = ('"+n_faculdade+"') where numeroCc = ('"+nCC+"')");
 			st.executeUpdate();
@@ -661,26 +785,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public String getDepartamento(int nCC)throws RemoteException {
+	public String getDepartamento(int nCC)throws RemoteException, SQLException {
 		String n_depar = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select departamento from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			n_depar = rs.getString(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return n_depar;
 	}
 	
-	public boolean setDepartamento(int nCC, String n_departamento) throws RemoteException {
+	public boolean setDepartamento(int nCC, String n_departamento) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update pessoa set departamento = ('"+n_departamento+"') where numeroCc = ('"+nCC+"')");
 			st.executeUpdate();
@@ -688,26 +820,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public int getTelefone(int nCC)throws RemoteException {
+	public int getTelefone(int nCC)throws RemoteException, SQLException {
 		int n_tel = 0;
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select telefone from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			n_tel = rs.getInt(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return n_tel;
 	}
 	
-	public boolean setTelefone(int nCC, int n_telefone) throws RemoteException {
+	public boolean setTelefone(int nCC, int n_telefone) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update pessoa set telefone = ('"+n_telefone+"') where numeroCc = ('"+nCC+"')");
 			st.executeUpdate();
@@ -715,26 +855,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public String getMorada(int nCC)throws RemoteException {
+	public String getMorada(int nCC)throws RemoteException, SQLException {
 		String n_mora = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select morada from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			n_mora = rs.getString(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return n_mora;
 	}
 	
-	public boolean setMorada(int nCC, String n_morada) throws RemoteException {
+	public boolean setMorada(int nCC, String n_morada) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update pessoa set morada = ('"+n_morada+"') where numeroCc = ('"+nCC+"')");
 			st.executeUpdate();
@@ -742,26 +890,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	public String getDataCC(int nCC)throws RemoteException {
+	public String getDataCC(int nCC)throws RemoteException, SQLException {
 		String n_dat = "";
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select dataCc from pessoa where numeroCc = ('"+nCC+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			n_dat = rs.getString(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return n_dat;
 	}
 	
-	public boolean setDataCC(int nCC, String n_data) throws RemoteException {
+	public boolean setDataCC(int nCC, String n_data) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("Update pessoa set dataCc = to_date('"+n_data+"') where numeroCc = ('"+nCC+"')");
 			st.executeUpdate();
@@ -769,11 +925,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 
-	public String addMembrosMesaVoto(int mesaVoto, int nCC1, int nCC2, int nCC3) throws RemoteException {
+	public String addMembrosMesaVoto(int mesaVoto, int nCC1, int nCC2, int nCC3) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("UPDATE mesavoto SET id_pessoa1 = '"+nCC1+"', id_pessoa2 = '"+nCC2+"', id_pessoa3 = '"+nCC3+"' WHERE id = '"+mesaVoto+"'");
 			st.executeUpdate();
@@ -781,12 +941,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return "type : add_MembersVoteTable , ok : true";
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return "type : add_MembersVoteTable , ok : false";
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
-	
-	public String removeMembroMesaVoto(int mesaVoto) throws RemoteException {
+	public String removeMembroMesaVoto(int mesaVoto) throws RemoteException, SQLException {
+		conn.setAutoCommit(false);
 		try {
 			PreparedStatement st = conn.prepareStatement("UPDATE mesavoto SET id_pessoa1 = null, id_pessoa2 = null, id_pessoa3 = null WHERE id = "+mesaVoto+"");
 			st.executeUpdate();
@@ -794,7 +957,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			return "type : remove_MembersVoteTable , ok : true";
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return "type : remove_MembersVoteTable , ok : false";
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 	
@@ -830,45 +996,53 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 	*/
 	
-	private int nmtoidDepart(String nome_b)throws RemoteException {
+	private int nmtoidDepart(String nome_b)throws RemoteException, SQLException {
 		int tempNum = 0;
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
-			String sql = "select id from departamento where nome = ('"+nome_b+"')";
+			String sql = "select id from departamento where nomedep = ('"+nome_b+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
-			tempNum = rs.getInt(1);
-			conn.close();
+			tempNum = rs.getInt(1);;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return tempNum;
 	}
 	
-	private int nmtoidFaculd(String nome_b)throws RemoteException {
+	private int nmtoidFaculd(String nome_b)throws RemoteException, SQLException {
 		int tempNum = 0;
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
-			String sql = "select id from faculdade where nome = ('"+nome_b+"')";
+			String sql = "select id from faculdade where nomefac = ('"+nome_b+"')";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			tempNum = rs.getInt(1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
+			throw e;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 		return tempNum;
 	}
 
-	public boolean testeNCC(int ncc) throws RemoteException {
+	public boolean testeNCC(int ncc) throws RemoteException, SQLException {
 		int contador = 0;
+		conn.setAutoCommit(false);
 		try {
 			Statement st = conn.createStatement();
 			String sql = "select count(*) from pessoa WHERE  numeroCc = '"+ncc+"'";
 			ResultSet rs = st.executeQuery(sql);
 			rs.next();
 			contador = rs.getInt(1);
-			conn.close();
 			if(contador!=0) {
 				return false;
 			} else {
@@ -876,7 +1050,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 			return false;
+		} finally {
+			conn.setAutoCommit(true);
 		}
 	}
 
