@@ -159,11 +159,7 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 		return null;
 	}
 
-	@Override
-	public String getTipo(int id_elei) throws RemoteException {
-		// TODO Auto-generated method stub
-		return "";
-	}
+
 
 	@Override
 	public boolean setTipo(int id_elei, String n_tipo) throws RemoteException {
@@ -171,17 +167,8 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 		return false;
 	}
 
-	@Override
-	public String getDataInicio(int id_elei) throws RemoteException {
-		// TODO Auto-generated method stub
-		return "";
-	}
 
-	@Override
-	public String getDataFim(int id_elei) throws RemoteException {
-		// TODO Auto-generated method stub
-		return "";
-	}
+
 
 	@Override
 	public boolean setDataInicio(String d_inicio, int id_elei) throws RemoteException {
@@ -195,11 +182,7 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 		return false;
 	}
 
-	@Override
-	public String getTitulo(int id_elei) throws RemoteException {
-		// TODO Auto-generated method stub
-		return "";
-	}
+
 
 	@Override
 	public boolean setTitulo(String n_titulo, int id_elei) throws RemoteException {
@@ -207,11 +190,7 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 		return false;
 	}
 
-	@Override
-	public String getDescricao(int id_elei) throws RemoteException {
-		// TODO Auto-generated method stub
-		return "";
-	}
+
 
 	@Override
 	public boolean setDescricao(String n_descricao, int id_elei) throws RemoteException {
@@ -379,7 +358,38 @@ public class TESTE_rmiServer extends UnicastRemoteObject implements RMI_1{
 	}
 
 	@Override
-	public ArrayList<String> ListDepartamentos(String faculdadeTemp) throws RemoteException {
+	public ArrayList<String> ListDepartamentos(String faculdadeTemp)
+			throws RemoteException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getTipo(int id_elei) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDataInicio(int id_elei) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDataFim(int id_elei) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getTitulo(int id_elei) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDescricao(int id_elei) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
