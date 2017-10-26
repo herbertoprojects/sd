@@ -1425,12 +1425,37 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	/*
-	public ArrayList <String> listaMembrosMesaVoto(String mesaVoto) throws RemoteException {
-		
+	
+	public ArrayList <String> listaMembrosMesaVoto(int id_mesaVoto) throws RemoteException {
+		ArrayList<String> listaMesas = new ArrayList<String>();
+		try {
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			String sql = "select id_pessoa1, id_pessoa2, id_pessoa3 from mesavoto where id = '"+id_mesaVoto+"'";
+			ResultSet rs = st.executeQuery(sql);
+			while (rs.next()) {
+			    listaMesas.add(rs.getInt(1)+" - "+rs.getInt(2)+" - "+rs.getInt(3));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return listaMesas;
 	}
 	
-	*/
+
 	/*
 	public boolean votaAntecipadamente(int nCC, String passwordUser) throws RemoteException {
 		
@@ -1525,6 +1550,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			}
 		}
 	}
+	
 
 	@Override
 	public boolean ligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
@@ -1567,8 +1593,33 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 
 	@Override
-	public ArrayList<String> ListDepartamentos(String faculdadeTemp) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<String> ListDepartamentos(String faculdadeTemp) throws RemoteException {
+		int id_fac = nmtoidFaculd(faculdadeTemp);
+		ArrayList<String> listDepart = new ArrayList<String>();
+		try {
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			String sql = "select nome from departamento where id_faculd = '"+id_fac+"'";
+			ResultSet rs = st.executeQuery(sql);
+			while (rs.next()) {
+			    listDepart.add(rs.getInt(1)+" - "+rs.getInt(2)+" - "+rs.getInt(3));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return listDepart;
 	}
 }
