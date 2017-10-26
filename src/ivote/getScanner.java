@@ -128,7 +128,7 @@ public class getScanner {
 	
 	//A lista é uma string separa por;
 	public String mudaListaString(String texto, String lista) {
-		System.out.println("Anterior: "+ texto);
+		System.out.println(texto);
 		System.out.println("");
 		String [] textos = lista.split(";");
 		for(int i = 0;i<texto.length();i++) {

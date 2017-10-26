@@ -263,10 +263,28 @@ public class AdminConsole extends UnicastRemoteObject{
 				String moradaTemp = leTeclado.leLinha("Morada: ");									//morada
 				
 				String dataccTemp = leTeclado.pedeData("Data cartão cidadão: ");					//Data CC
-			
-				String facTemp = pedeFac();															//faculdade
-				String depTemp = pedeDep(facTemp);
-				String cargoTemp = "";
+				
+				
+				String listaTemp = "";
+				ArrayList <String> listaFaculdades1 = comunicacao.ListFaculdades();
+				for (String textoTemp:listaFaculdades1) {
+					if(listaTemp=="") {listaTemp = textoTemp;}
+					else {listaTemp = listaTemp+";"+textoTemp;}
+				}
+				
+				
+				String facTemp = leTeclado.mudaListaString("Faculdade: ", listaTemp);				//faculdade
+				
+				listaTemp = "";
+				listaFaculdades1 = comunicacao.ListDepartamentos(facTemp);
+				for (String textoTemp:listaFaculdades1) {
+					if(listaTemp=="") {listaTemp = textoTemp;}
+					else {listaTemp = listaTemp+";"+textoTemp;}
+				}
+				
+				String depTemp = leTeclado.mudaListaString("Departamento: ", listaTemp);
+				
+				String cargoTemp = leTeclado.mudaListaString("Cargo: ","aluno;docente;funcionario");
 				
 				//cargo
 				System.out.println("1- Aluno");
@@ -322,6 +340,9 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	public String pedeFac() {
+		
+		
+		
 		return "";
 		
 	}
