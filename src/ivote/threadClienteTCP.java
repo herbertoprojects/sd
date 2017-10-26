@@ -161,6 +161,7 @@ public class threadClienteTCP extends Thread {
 		}
 		return "type|message;text|Comando errado";
 	}
+	
 	private String sendVote(ArrayList <String []> textos) {
 		if(textos.size()==2) {
 			if(terminalAssociado.vote) {
