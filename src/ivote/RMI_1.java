@@ -144,6 +144,7 @@ public interface RMI_1 extends Remote{
 	/*
 	public ArrayList <String> listaMembrosMesaVoto(String mesaVoto) throws RemoteException;
 
+
 	//voto antecipado
 	public boolean votaAntecipadamente(int nCC, String passwordUser) throws RemoteException;
 	
