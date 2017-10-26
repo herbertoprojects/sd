@@ -866,7 +866,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 	
 	/*
-	public ArrayList <String> localVotoEleitor(String nome,int numCC,int telefone) throws RemoteException {
+	public ArrayList <String> localVotoEleitor(String nome, int numCC, int telefone) throws RemoteException {
 		
 	}
 	
@@ -876,6 +876,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	
 	public String eleitoresTReal() throws RemoteException {
 		
+	}
+
+	public String terminoEleicao() throws RemoteException {
+	
 	}
 
 	public String consultaResulPass(String eleicao) throws RemoteException {

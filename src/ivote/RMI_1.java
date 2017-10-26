@@ -87,7 +87,6 @@ public interface RMI_1 extends Remote{
 	// na pequisa por nome pode surgir mais que um eleitor por isso retorna um array list
 	public ArrayList <String> localVotoEleitor(String nome,int numCC,int telefone) throws RemoteException;
 	
-	
 	//Mostrar o estado das mesas de voto
 	public String estadoMesas(String mesaVoto) throws RemoteException;
 	
@@ -97,8 +96,7 @@ public interface RMI_1 extends Remote{
 	
 	//Término da eleição na data, hora e minuto marcados, não precisa de ser implementado na interface, isto é automaticamente feito pelo
 	//servidor de RMI
-	//public String terminoEleicao() throws RemoteException;
-	
+	//s
 	
 	//Consultar resultados detalhados de eleições passadas
 	public String consultaResulPass(String eleicao) throws RemoteException;
