@@ -10,18 +10,31 @@ import java.util.ArrayList;
 public class AdminConsole extends UnicastRemoteObject{
 	
 	/**
-	 * 
+	 * @author Júlio Girão
+	 * @author Herberto Cardoso
+	 * @author Luís Almeida
+	 * @return
+	 * @throws
 	 */
+	
 	private static final long serialVersionUID = 1L;
 	public static RMI_1 comunicacao;
 	public getScanner leTeclado;
 	
 	public AdminConsole() throws RemoteException{
+		/***
+		 * construtor da classe AdminConsole
+		 * @throws retorna uma exceção quando não há ligação com o servidor
+		 */
+		
 		super();
 		leTeclado = new getScanner();
 	}
 	
 	public static void main(String[] args){
+		/**
+		 * inicializa ligação com o RMI server e executa o menu
+		 */
 		AdminConsole consola = null;
 		try {
 			consola = new AdminConsole();
@@ -40,6 +53,10 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	public void menuInicial() {
+		/**
+		 * menu inicial
+		 * @return void saída do menu inicial
+		 */
 		while(true) {
 			System.out.println();
 			System.out.println("------------MAIN MENU-----------");
@@ -115,9 +132,10 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 	}
 	
+	
 	public void menuFac() {
 		while(true) {
-		 	System.out.println("------------Sub Menu das Faculades------------");
+		 	System.out.println("------------Sub Menu das Faculdades------------");
 			System.out.println("1- Adicionar faculdade");
 			System.out.println("2- Remover faculdade");
 			System.out.println("3- Consultar faculdade");
@@ -152,6 +170,7 @@ public class AdminConsole extends UnicastRemoteObject{
 			leTeclado.leLinha("Continuar...");
 		}
 	}
+	
 	
 	private boolean consultaFac() {
 		
@@ -503,7 +522,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 		String nomeFaculd = leTeclado.leLinha("Nome da faculadade: ");
 		String sigla = leTeclado.leLinha("Sigla da faculdade: ");
-		int id = leTeclado.pedeNumero("Id da faculdade: ", 1000, 200000000);
+		int id = leTeclado.pedeNumero("Id da faculdade: ", 0, 999);
 		System.out.println(id+ " "+sigla+" "+nomeFaculd);
 		System.out.println("1- Confirmar");
 		System.out.println("0- Cancelar");
@@ -528,7 +547,7 @@ public class AdminConsole extends UnicastRemoteObject{
 				System.out.println(temp);				
 			}
 			do {
-				idFac = leTeclado.pedeNumero("Introduza o id da faculdade (0- Cancelar): ", 0, 2000000);
+				idFac = leTeclado.pedeNumero("Introduza o id da faculdade (0- Cancelar): ", 0, 999);
 	
 			}
 			while (!comunicacao.removeFaculdade(idFac) || idFac == 0);
@@ -564,7 +583,7 @@ public class AdminConsole extends UnicastRemoteObject{
 				System.out.println(temp_2);				
 			}
 			do {
-				idDep_2 = leTeclado.pedeNumero("Introduza o id do departamento (0- Cancelar): ", 0, 2000000);
+				idDep_2 = leTeclado.pedeNumero("Introduza o id do departamento (0- Cancelar): ", 0, 999);
 	
 			}
 			while (!comunicacao.removeFaculdade(idDep_2) || idDep_2 == 0);
@@ -581,8 +600,8 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 		String sigla = leTeclado.leLinha("Sigla do departamento: ");
 		String nomeDepart = leTeclado.leLinha("Nome do departamento: ");
-		int id = leTeclado.pedeNumero("Id do departamento: ", 1000, 200000000);
-		int idFac = leTeclado.pedeNumero("Id da faculdade", 1000, 200000000);
+		int id = leTeclado.pedeNumero("Id do departamento: ", 0, 999);
+		int idFac = leTeclado.pedeNumero("Id da faculdade", 0, 999);
 		
 		System.out.println(id+ " "+sigla+" "+nomeDepart+" "+idFac);
 		System.out.println("1- Confirmar");
