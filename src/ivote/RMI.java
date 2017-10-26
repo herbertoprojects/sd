@@ -1550,6 +1550,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			}
 		}
 	}
+	
 
 	@Override
 	public boolean ligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
