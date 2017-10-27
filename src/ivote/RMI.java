@@ -6,54 +6,69 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.ArrayList;
 import java.rmi.Naming;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 
 public class RMI extends UnicastRemoteObject implements RMI_1 {
 	
+	getOptions parametrosEntrada;
+	boolean debug_teste = true;
+	
 	protected RMI() throws RemoteException {
 		super();
+		parametrosEntrada = new getOptions();
 	}
 	
 	private static final long serialVersionUID = 1L;
 	
 	public static Connection conn = null;
 	
+	public void debug(String texto) {
+		if(debug_teste) {System.out.println(texto);}
+	}
+	
 	public static void main(String[] args) {
-		int portaRMI;
-		RMI_1 rmi = null;
+		RMI server = null;
 		
 		try {
-			if(args.length != 2) {
-				System.out.println("Argumentos em falta!");
-				System.exit(0);
-			}
-			
-			portaRMI = Integer.parseInt(args[1]);
-			
+			server = new RMI();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int falhas = 0;
+		System.out.println("Servidor secundario...");
+		while(falhas < 10) {
+			falhas = server.ServidorSecundario(falhas);
 			try {
-				primario(portaRMI);
-				rmi = (RMI_1) Naming.lookup("rmi://"+args[0]+":"+portaRMI+"/rmi");
-				System.out.println("Primário ligado!");
-			} catch (MalformedURLException e1) {
-				e1.printStackTrace();
-			} catch (NotBoundException | RemoteException e){
+				Thread.sleep(250);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		} catch(Exception e) {
-			System.out.println("RMI: Erro na porta "+e);
-			System.exit(1);
 		}
+		
+		server.primario(server.parametrosEntrada.portRmiServer);
 		
 	}
 	
-	private static void primario(int portaRMI) {
+	private void primario(int portaRMI) {
+		System.out.println();
 		System.out.println("RMI primário");
 		try {
+			Thread hearthBitSend = (new Thread() {public void run() {enviaHearthBit();}});
+			hearthBitSend.start();
+			
 			LocateRegistry.createRegistry(portaRMI);
-			RMI_1 rmi = new RMI();
-			Naming.rebind("rmi://localhost:"+portaRMI+"/rmi", rmi);
+			Naming.rebind("rmi://localhost:"+portaRMI+"/rmi", this);
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "proj", "proj");
 			System.out.println("Conectado há base de dados"+conn);
@@ -68,6 +83,66 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			
 		}
 	}*/
+	
+	public int ServidorSecundario(int numTemp) {
+		DatagramSocket socketCliente = null;
+		
+		try {
+			socketCliente = new DatagramSocket(parametrosEntrada.hearthBitPort);
+			socketCliente.setSoTimeout(250);
+			byte [] reciveData = new byte[1024];
+			DatagramPacket recivePacket = new DatagramPacket(reciveData, reciveData.length);
+			socketCliente.receive(recivePacket);
+			String mensagem = new String(recivePacket.getData());
+			socketCliente.close();
+			return 0;
+			
+		} catch (SocketException e1) {
+			return numTemp;
+		}catch (SocketTimeoutException e) {
+			socketCliente.close();
+			System.out.print(numTemp+"♥ ");
+			return numTemp+1;
+		} catch (IOException e) {
+			socketCliente.close();
+			return numTemp;
+		}
+	}
+	
+	public void enviaHearthBit() {
+		byte[] sendData = new byte[1024];
+		sendData = "Vivo".getBytes();
+		DatagramSocket socketEnvia;
+		InetAddress IPAddress;
+		DatagramPacket packet;
+		
+		while(true) {
+			try {
+				IPAddress = InetAddress.getByName(parametrosEntrada.ipRmiServer_2);
+				socketEnvia = new DatagramSocket();
+				packet = new DatagramPacket(sendData, sendData.length, IPAddress,parametrosEntrada.hearthBitPort);
+				socketEnvia.send(packet);
+				Thread.sleep(250);
+				socketEnvia.close();
+				
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+	}
 
 	
 	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart) throws RemoteException {
