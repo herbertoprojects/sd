@@ -12,7 +12,6 @@ public class getOptions {
 	public String ipRmiServer = "";
 	public String ipRmiServer_2 = "";
 	public int hearthBitPort = 0;
-	public int hearthBitPort_2 = 0;
 	
 	getOptions(){
 		try {
@@ -27,8 +26,7 @@ public class getOptions {
 				else{if(textos[0].equalsIgnoreCase("portRmiServer_2")) {portRmiServer_2=Integer.parseInt(textos[1]);}
 				else{if(textos[0].equalsIgnoreCase("ipRmiServer_2")) {ipRmiServer_2=textos[1];}
 				else{if(textos[0].equalsIgnoreCase("hearthBitPort")) {hearthBitPort=Integer.parseInt(textos[1]);}
-				else{if(textos[0].equalsIgnoreCase("hearthBitPort_2")) {hearthBitPort_2=Integer.parseInt(textos[1]);}
-				else {System.out.println("Options: Opcoes sem correspondencia");}}}}}}}}
+				else {System.out.println("Options: Opcoes sem correspondencia");}}}}}}}
 			}
 			lerOptions.close();
 		}catch(IOException e) {
