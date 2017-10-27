@@ -43,7 +43,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		}
 
 		try {
-			comunicacao = (RMI_1) Naming.lookup("rmi://localhost:7000/rmi");
+			comunicacao = (RMI_1) Naming.lookup("rmi://127.0.0.1:7000/rmi");
 		} catch (RemoteException | MalformedURLException | NotBoundException  e) {
 			e.printStackTrace();
 		}
@@ -548,10 +548,9 @@ public class AdminConsole extends UnicastRemoteObject{
 			}
 			do {
 				idFac = leTeclado.pedeNumero("Introduza o id da faculdade (0- Cancelar): ", 0, 999);
-	
+				if(idFac==0) {return false;}
 			}
-			while (!comunicacao.removeFaculdade(idFac) || idFac == 0);
-			return idFac == 0 ? false:true;
+			while (!comunicacao.removeFaculdade(idFac));
 			
 		} catch (RemoteException e) {
 			e.printStackTrace();	
@@ -584,10 +583,9 @@ public class AdminConsole extends UnicastRemoteObject{
 			}
 			do {
 				idDep_2 = leTeclado.pedeNumero("Introduza o id do departamento (0- Cancelar): ", 0, 999);
-	
+				if(idDep_2==0) {return false;}
 			}
-			while (!comunicacao.removeFaculdade(idDep_2) || idDep_2 == 0);
-			return idDep_2 == 0 ? false:true;
+			while (!comunicacao.removeFaculdade(idDep_2));
 			
 		} catch (RemoteException e) {
 			e.printStackTrace();	

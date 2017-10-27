@@ -3,5 +3,5 @@ portServerTcp:1220
 ipRmiServer:127.0.0.1
 portRmiServer:7000
 ipRmiServer_2:127.0.0.1
-portRmiServer:7001
+portRmiServer_2:7001
 hearthBitPort:7011
