@@ -151,7 +151,23 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			int id_faculd = nmtoidFaculd(no_faculd);
 			int id_depart = nmtoidDepart(no_depart);
 			Statement st = conn.createStatement();
-			st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', '"+id_depart+"')");
+			if(no_faculd==null) {
+				if(no_depart == null) {
+					st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', null , null)");
+				}else {
+					st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', null, '"+id_depart+"')");
+				}
+				
+			}else {
+				if(no_depart == null) {
+					st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', null)");
+				}
+				else {
+					st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', '"+id_depart+"')");
+				}
+			}
+			
+			
 			conn.commit();
 			return "type : register , ok : true";
 		} catch (SQLException e) {
@@ -258,6 +274,35 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return departamentos;
 	}
 	
+	public ArrayList <String> ListDepartamentos() throws RemoteException {
+		ArrayList<String> departamentos = new ArrayList<String>();
+		try {
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			String sql = "select * from departamento";
+			ResultSet rs = st.executeQuery(sql);
+			while (rs.next()) {
+			    departamentos.add(rs.getString(1)+" - "+rs.getString(2)+" - "+rs.getInt(3));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return departamentos;
+	}
+	
 	public boolean addDepartamento(String sigla,String nomeDepart, int id, int id_faculd)throws RemoteException {
 		try {
 			conn.setAutoCommit(false);
@@ -284,11 +329,11 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public boolean removeDepartamento(int id_depart, int id_faculd)throws RemoteException {
+	public boolean removeDepartamento(int id_depart)throws RemoteException {
 		try {
 			conn.setAutoCommit(false);
 			Statement st = conn.createStatement();
-			st.executeUpdate("Delete from departamento where id = ('"+id_depart+"') and id_faculd = ('"+id_faculd+"')");
+			st.executeUpdate("Delete from departamento where id = ('"+id_depart+"')");
 			conn.commit();
 			return true;
 		} catch (SQLException e) {

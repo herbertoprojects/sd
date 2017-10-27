@@ -128,18 +128,19 @@ public class getScanner {
 	
 	//A lista é uma string separa por;
 	public String mudaListaString(String texto, String lista) {
-		System.out.println(texto);
 		System.out.println("");
+		System.out.println(texto);
 		String [] textos = lista.split(";");
-		for(int i = 0;i<texto.length();i++) {
-			System.out.println((i+1)+"- "+textos[0]);
+		for(int i = 0;i<textos.length;i++) {
+			System.out.println((i+1)+"- "+textos[i]);
 		}
 		System.out.println("0- Sair");
 		int opcao = pedeNumero("Opção: ", 0, textos.length);
 		if(opcao != 0) {
 			String texto1 = textos[opcao-1];
+			return texto1;
 		}
-		return texto;
+		return null;
 
 	}
 	
