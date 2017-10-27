@@ -287,8 +287,8 @@ public class AdminConsole extends UnicastRemoteObject{
 				String listaTemp = "";
 				ArrayList <String> listaFaculdades1 = comunicacao.ListFaculdades();
 				for (String textoTemp:listaFaculdades1) {
-					if(listaTemp=="") {listaTemp = textoTemp;}
-					else {listaTemp = listaTemp+";"+textoTemp;}
+					if(listaTemp=="") {listaTemp = textoTemp.split(" - ")[0];}
+					else {listaTemp = listaTemp+";"+textoTemp.split(" - ")[0];}
 				}
 				
 				
@@ -297,39 +297,23 @@ public class AdminConsole extends UnicastRemoteObject{
 				listaTemp = "";
 				listaFaculdades1 = comunicacao.ListDepartamentos(facTemp);
 				for (String textoTemp:listaFaculdades1) {
-					if(listaTemp=="") {listaTemp = textoTemp;}
-					else {listaTemp = listaTemp+";"+textoTemp;}
+					if(listaTemp=="") {listaTemp = textoTemp.split(" - ")[0];}
+					else {listaTemp = listaTemp+";"+textoTemp.split(" - ")[0];}
 				}
 				
 				String depTemp = leTeclado.mudaListaString("Departamento: ", listaTemp);
 				
 				String cargoTemp = leTeclado.mudaListaString("Cargo: ","aluno;docente;funcionario");
 				
-				//cargo
-				System.out.println("1- Aluno");
-				System.out.println("2- Docente");
-				System.out.println("3- Funcionário");
-				
-				
-				switch(leTeclado.pedeNumero("Opção: ", 1, 3)) {
-				case 1: cargoTemp = "aluno";
-					break;
-				case 2: cargoTemp = "docente";
-					break;
-				case 3: cargoTemp = "funcionario";
-					break;
-				
-				}
 				comunicacao.registar(cargoTemp, nccTemp, dataccTemp, nomeTemp, passTemp, telefoneTemp, moradaTemp, facTemp, depTemp);
-			}
-			
-		} 
-		
-		
-		catch (RemoteException e) {
-			e.printStackTrace();
+				return true;
+				}
+		}catch(RemoteException e) {
+			return false;
 		}
+		
 		return false;
+				
 		
 	}
 	
@@ -555,7 +539,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		} catch (RemoteException e) {
 			e.printStackTrace();	
 		}	
-		return false;
+		return true;
 	}
 	
 	
@@ -590,7 +574,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		} catch (RemoteException e) {
 			e.printStackTrace();	
 		}	
-		return false;
+		return true;
 			
 	}
 	
@@ -599,15 +583,30 @@ public class AdminConsole extends UnicastRemoteObject{
 		String sigla = leTeclado.leLinha("Sigla do departamento: ");
 		String nomeDepart = leTeclado.leLinha("Nome do departamento: ");
 		int id = leTeclado.pedeNumero("Id do departamento: ", 0, 999);
-		int idFac = leTeclado.pedeNumero("Id da faculdade", 0, 999);
 		
-		System.out.println(id+ " "+sigla+" "+nomeDepart+" "+idFac);
+		String listaTemp = "";
+		ArrayList<String> listaFaculdades1 = null;
+		
+		try {
+			listaFaculdades1 = comunicacao.ListFaculdades();
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		for (String textoTemp:listaFaculdades1) {
+			if(listaTemp=="") {listaTemp = textoTemp;}
+			else {listaTemp = listaTemp+";"+textoTemp;}
+		}
+		String facTemp = leTeclado.mudaListaString("Faculdade: ", listaTemp);
+		
+		System.out.println(id+ " "+sigla+" "+nomeDepart+" "+facTemp);
 		System.out.println("1- Confirmar");
 		System.out.println("0- Cancelar");
 		
 		if(leTeclado.pedeNumero("Opção: ", 0, 1)== 1) {
 			try {
-				if(comunicacao.addDepartamento(sigla, nomeDepart, id, idFac )) {
+				if(comunicacao.addDepartamento(sigla, nomeDepart, id, Integer.getInteger(facTemp.split(" ")[0]) )) {
 					return true;
 				}
 			} catch (RemoteException e) {

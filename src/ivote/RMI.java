@@ -200,6 +200,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 
 	public ArrayList <String> ListFaculdades() throws RemoteException {
+		
 		ArrayList<String> faculdades = new ArrayList<String>();
 		try {
 			conn.setAutoCommit(false);
@@ -1677,7 +1678,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			String sql = "select nome from departamento where id_faculd = '"+id_fac+"'";
 			ResultSet rs = st.executeQuery(sql);
 			while (rs.next()) {
-			    listDepart.add(rs.getInt(1)+" - "+rs.getInt(2)+" - "+rs.getInt(3));
+			    listDepart.add(rs.getInt(3)+" - "+rs.getInt(2)+" - "+rs.getInt(1));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
