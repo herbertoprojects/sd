@@ -148,21 +148,24 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart) throws RemoteException {
 		try {
 			conn.setAutoCommit(false);
-			int id_faculd = nmtoidFaculd(no_faculd);
-			int id_depart = nmtoidDepart(no_depart);
+			int id_faculd;
+			int id_depart; 
 			Statement st = conn.createStatement();
 			if(no_faculd==null) {
 				if(no_depart == null) {
 					st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', null , null)");
 				}else {
+					id_depart= nmtoidDepart(no_depart);
 					st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', null, '"+id_depart+"')");
 				}
 				
 			}else {
+				id_faculd=nmtoidFaculd(no_faculd);
 				if(no_depart == null) {
 					st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', null)");
 				}
 				else {
+					id_depart= nmtoidDepart(no_depart);
 					st.executeUpdate("Insert into pessoa values ('"+tipo+"', '"+numeroCc+"', to_date('"+dataCc+"','yyyy/mm/dd'), '"+nome+"', '"+password+"', '"+telefone+"', '"+morada+"', '"+id_faculd+"', '"+id_depart+"')");
 				}
 			}
