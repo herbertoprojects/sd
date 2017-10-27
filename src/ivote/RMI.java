@@ -78,11 +78,6 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	/*
-	private static void secundario(RMI_1 rmi, int portaRMI) {s
-			
-		}
-	}*/
 	
 	public int ServidorSecundario(int numTemp) {
 		DatagramSocket socketCliente = null;
@@ -1675,48 +1670,103 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-
-	@Override
-	public boolean ligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean desligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+	public String ligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
+		int contador = 0;
+		try {
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			String sql = "select count(*) from mesavoto where userN = '"+nomeMesaVoto+"' and pass = '"+passwordMesaVoto+"';";
+			ResultSet rs = st.executeQuery(sql);
+			rs.next();
+			contador = rs.getInt(1);
+			if(contador==1) {
+				conn.setAutoCommit(false);
+				st = conn.createStatement();
+				sql = "select id from mesavoto where userN = '"+nomeMesaVoto+"' and pass = '"+passwordMesaVoto+"';";
+				rs = st.executeQuery(sql);
+				rs.next();
+				return rs.getString(1);
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			return null;
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
-
-	@Override
-	public boolean desbloquearUser(String nomeMesaVoto, String passwordMesaVoto, int nCC) throws RemoteException {
+	public boolean desbloquearUser(String nomeMesaVoto, String passwordMesaVoto, int nCC, int elect) throws RemoteException {
+		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {
+			int contador = 0;
+			try {
+				conn.setAutoCommit(false);
+				Statement st = conn.createStatement();
+				String sql = "select count(*) from voto WHERE id_pessoa = '"+nCC+"' and id_eleicao = '"+elect+"' and blocked = 0";
+				ResultSet rs = st.executeQuery(sql);
+				rs.next();
+				contador = rs.getInt(1);
+				if(contador==0) {
+					comandoSql("insert into voto values (numLista.nextVal, "+elect+", "+nCC+", null, null, 1)");
+					return false;
+				} else {
+					return true;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				return false;
+			} finally {
+				try {
+					conn.setAutoCommit(true);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public boolean desbloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser)
+	public boolean desbloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, int id_elect)
 			throws RemoteException {
+		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {
+			comandoSql("update voto set blocked = 0 where id_pessoa = "+nCC+" and id_eleicao = "+id_elect+"");
+		}
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public boolean bloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser)
 			throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int voto)
 			throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public ArrayList<String> ListDepartamentos(String faculdadeTemp) throws RemoteException {
 		int id_fac = nmtoidFaculd(faculdadeTemp);
 		ArrayList<String> listDepart = new ArrayList<String>();
@@ -1745,5 +1795,20 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			}
 		}
 		return listDepart;
+	}
+	
+	public ResultSet comandoSql(String comand) {
+		Statement st;
+		try {
+			conn.setAutoCommit(false);
+			st = conn.createStatement();
+			String sql = comand;
+			ResultSet rs = st.executeQuery(sql);
+			return rs;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

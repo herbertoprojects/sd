@@ -153,15 +153,14 @@ public interface RMI_1 extends Remote{
 	//-Desbloquear Voto
 	//-Votar antecipadamente
 	*/
-	public boolean ligarServidor(String nomeMesaVoto,String passwordMesaVoto) throws RemoteException;
-	public boolean desligarServidor(String nomeMesaVoto,String passwordMesaVoto) throws RemoteException;
+	public String ligarServidor(String nomeMesaVoto,String passwordMesaVoto) throws RemoteException;
 	
-	public boolean desbloquearUser(String nomeMesaVoto,String passwordMesaVoto,int nCC) throws RemoteException;
+	public boolean desbloquearUser(String nomeMesaVoto, String passwordMesaVoto, int nCC, int elect) throws RemoteException;
 	//verificar se o user existe nesta eleicao (exemplo na eleicao de detartamento se pertence ao departamento)
 	//verificar se o user ja votou
 	//e bloquear o user para que não vote em mais nenhuma mesa
 	
-	public boolean desbloquearVoto(String nomeMesaVoto,String passwordMesaVoto, int nCC, String passwordUser) throws RemoteException;
+	public boolean desbloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, int id_elect) throws RemoteException;
 	public boolean bloquearVoto(String nomeMesaVoto,String passwordMesaVoto, int nCC, String passwordUser) throws RemoteException;
 
 	//verificar se o user está bloqueado a esta mesa de voto
