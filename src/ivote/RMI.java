@@ -435,7 +435,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		try {
 			conn.setAutoCommit(false);
 			Statement st = conn.createStatement();
-			st.executeUpdate("Delete from eleicao where id = ("+id_eleicao+")");
+			st.executeUpdate("Delete from listacontagem where id_eleicao = "+id_eleicao+"");
+			st.executeUpdate("Delete from mesavoto where id_eleicao = "+id_eleicao+"");
+			st.executeUpdate("Delete from pessoaslista where id_eleicao = "+id_eleicao+"");
+			st.executeUpdate("Delete from eleicao where id = "+id_eleicao+"");
 			conn.commit();
 			return true;
 		} catch (SQLException e) {
