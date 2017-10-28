@@ -602,11 +602,11 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-<<<<<<< HEAD
+
 //TERMINAR E TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!s
-=======
+
 //TERMINAR E TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
->>>>>>> origin/novo1
+
 	public void mensagemRealTime(int eleicao,dadosEleicoes imprimir) throws RemoteException {
 		//TODO Por Acabar
 		ResultSet rs;
@@ -1942,7 +1942,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 
 //TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
-	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int id_elei)
+
 	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int id_elei, int id_lista_voto)
 			throws RemoteException {
 		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {
