@@ -602,7 +602,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public void mensagemRealTime(int eleicao,dadosEleicoes imprimir) throws Exception {
+	public void mensagemRealTime(int eleicao,dadosEleicoes imprimir) throws RemoteException {
 		//TODO Por Acabar
 		try {
 			imprimir.imprimeTexto("Teste");

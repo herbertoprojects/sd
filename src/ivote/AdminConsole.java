@@ -100,7 +100,7 @@ public class AdminConsole extends UnicastRemoteObject{
 					menuEleicoes();
 					break;
 				case 5:
-					
+					 
 					try {
 						comunicacao.mensagemRealTime(selecionaEleicao(), new realTimeDados());
 					} catch (Exception e) {
