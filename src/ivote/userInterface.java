@@ -13,20 +13,45 @@ public class userInterface extends Thread {
 	public ArrayList <terminalVoto> listaDeTerminais = new ArrayList<terminalVoto>();//sincronizado
 	public int numEleicao;
 	public getScanner leitorTeclado = new getScanner();
+	public getOptions opcoes;
+	public String nome;
 	
 	
-	public userInterface(RMI_1 comunicacaoRMI) {
+	public userInterface(RMI_1 comunicacaoRMI, getOptions opcoes,String nome) {
 		// TODO Auto-generated constructor stub
 		this.comunicacaoRMI = comunicacaoRMI;
+		this.opcoes = opcoes;
+		this.nome = nome;
 		this.start();
 	}
 	
 	public void run() {
-		this.menuDesligado();
+		int num = 0;
+		while(true) {
+			try {
+				this.menuDesligado();
+			} catch (RemoteException e) {
+				if(!new reparaLigacao(comunicacaoRMI, opcoes, nome).ligado) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					num++;
+					if(num==30) {
+						return;
+					}
+					System.out.println("Sem ligação");
+				}else {
+					num = 0;
+				}
+			}
+		}
 		
 	}
 	
-	public void menuDesligado() {
+	public void menuDesligado() throws RemoteException{
 		int opc=0;
 		while (true) {
 			System.out.println();
@@ -55,7 +80,7 @@ public class userInterface extends Thread {
 		}
 	}
 	
-	public void menuLigado() {
+	public void menuLigado() throws RemoteException {
 		int opc=0;
 		while (true) {
 			System.out.println();
@@ -139,7 +164,7 @@ public class userInterface extends Thread {
 							leitorTeclado.leLinha("Aguarde...");
 						}
 						else {
-							try {
+
 								int numCC = leitorTeclado.pedeNumero("Numero do Cartão de Cidadão: ", 9999999, 100000000);
 								System.out.println("1) Confirmar");
 								System.out.println("0) Cancelar");
@@ -157,10 +182,7 @@ public class userInterface extends Thread {
 										System.out.println("Utilizador invalido.");
 									}
 								}
-							} catch (RemoteException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							
 							leitorTeclado.leLinha("Continuar...");
 						}
 						

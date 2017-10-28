@@ -20,6 +20,7 @@ public class ServerTCP extends UnicastRemoteObject{
 	public RMI_1 comunicacaoRMI;
 	public ServerSocket server;
 	public getOptions opcoes;
+	public String nome;
 	
 	public userInterface menuInterface;
 
@@ -38,18 +39,22 @@ public class ServerTCP extends UnicastRemoteObject{
 		servidorTCP.ativaPrivilegios();
 		
 		//Cria comunicacao com servidor RMI
-		
+
 		try {
-		servidorTCP.ativaConnectionRMI(new getScanner().leLinha("Nome da mesa de voto: "));
+				servidorTCP.nome = new getScanner().leLinha("Nome da mesa de voto: ");
+				servidorTCP.ativaConnectionRMI(servidorTCP.nome);
 				//comunicacao com a mesa de voto (nova thread)
 				//servidorTCP.comunication = new aceptTerminalVoto(servidorTCP.server, servidorTCP.opcoes, servidorTCP.listaDeTerminais, servidorTCP.comunicacaoRMI,servidorTCP);
 				//evocar menu e guardar
-				servidorTCP.menuInterface = new userInterface(servidorTCP.comunicacaoRMI);
+				servidorTCP.menuInterface = new userInterface(servidorTCP.comunicacaoRMI,servidorTCP.opcoes,servidorTCP.nome);
 				
 				// binding ao porto tcp
 				servidorTCP.aceptTerminalVoto();
 		}catch (RemoteException e) {
-			System.out.println("Impossivel ligar ao servidor...");
+			if(new reparaLigacao(servidorTCP.comunicacaoRMI,servidorTCP.opcoes, servidorTCP.nome).ligado) {
+				servidorTCP.menuInterface = new userInterface(servidorTCP.comunicacaoRMI,servidorTCP.opcoes,servidorTCP.nome);
+			}
+			System.out.println("Time out exception...");
 		}
 	}
 	
@@ -82,6 +87,7 @@ public class ServerTCP extends UnicastRemoteObject{
 				if(mesasLivres()) {
 					System.out.println("Espera de terminal...");
 					Socket cliente = server.accept();
+					cliente.setSoTimeout(120000);
 					new threadClienteTCP(this.menuInterface.listaDeTerminais, cliente, this.menuInterface.numEleicao);
 				}else {
 					break;
