@@ -101,6 +101,13 @@ public class AdminConsole extends UnicastRemoteObject{
 					break;
 				case 5:
 					
+					try {
+						comunicacao.mensagemRealTime(selecionaEleicao(), new realTimeDados());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					break;
 				case 6:
 					break;

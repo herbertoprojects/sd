@@ -3,7 +3,7 @@ package ivote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class realTimeDados extends UnicastRemoteObject implements dadosEleicoes {
+public class realTimeDados extends UnicastRemoteObject implements dadosEleicoes{
 
 	protected realTimeDados() throws RemoteException {
 		super();
