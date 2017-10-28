@@ -90,9 +90,10 @@ public interface RMI_1 extends Remote{
 	public ArrayList <String> localVotoEleitor(String nome,int numCC,int telefone) throws RemoteException;
 	
 	//Mostrar o estado das mesas de voto
-	public String estadoMesas(String mesaVoto) throws RemoteException;
+	public String estadoMesas(String mesaVoto) throws RemoteException;*/
+	public void mensagemRealTime(int eleicao,dadosEleicoes imprimir) throws Exception;
 	
-	//Mostrar eleitores em tempo real
+	/*//Mostrar eleitores em tempo real
 	//terá se ser implementado pela consola noutra interface, ou ainda temos de decidir
 	public String eleitoresTReal() throws RemoteException;
 	

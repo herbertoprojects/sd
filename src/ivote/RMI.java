@@ -602,6 +602,16 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
+	public void mensagemRealTime(int eleicao,dadosEleicoes imprimir) throws Exception {
+		//TODO Por Acabar
+		try {
+			imprimir.imprimeTexto("Teste");
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean removeListaCandidatos(int id_LC) throws RemoteException {
 		try {
 			conn.setAutoCommit(false);
