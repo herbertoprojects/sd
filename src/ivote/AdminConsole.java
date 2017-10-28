@@ -5,6 +5,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class AdminConsole extends UnicastRemoteObject{
@@ -259,22 +260,38 @@ public class AdminConsole extends UnicastRemoteObject{
 					if(leTeclado.pedeNumero("Opcão: ", 0, 1)==1) {
 						try {
 							comunicacao.criaEleicao(tipoTemp, horaInicioTemp, horaFim, titulo, descricao,numero);
-							while (true) {
+							boolean teste = true;
+							while (teste) {
 								System.out.println("1- Adicionar Mesa de voto");
 								System.out.println("2- Remover Mesa de voto");
 								System.out.println("3- Consultar Mesa de voto");
-								System.out.println("4- Adicionar Mesa de voto");
-								System.out.println("5- Adicionar Mesa de voto");
-								System.out.println("6- Adicionar Mesa de voto");
+								System.out.println("4- Adicionar Lista");
+								System.out.println("5- Remover Lista");
+								System.out.println("6- ConsultarLista");
 								System.out.println("0- Sair");
 								
-								switch (leTeclado.pedeNumero(, minNum, maxNum)) {
-								case value:
-									
-									break;
-
-								default:
-									break;
+								switch (leTeclado.pedeNumero("Opção: ", 0, 6)) {
+									case 1:
+										adicionarMesaVoto(numero);
+										break;
+									case 2:
+										removeMesaVoto(numero);
+										break;
+									case 3:
+										consultaMesaVoto(numero);
+										break;
+									case 4:
+										adicionarLista(numero);
+										break;
+									case 5:
+										removerLista(numero);
+										break;
+									case 6:
+										consultarLista(numero);
+										break;
+									case 0:
+										teste = false;
+										break;
 								}
 							}
 						} catch (RemoteException e) {
@@ -284,20 +301,44 @@ public class AdminConsole extends UnicastRemoteObject{
 					}
 					break;
 				case 2:
+					try {
+						ArrayList<String> listaEleicoes = comunicacao.listEleicao();
+						if(listaEleicoes.isEmpty()) {
+							System.out.println("Sem eleições...");
+							break;
+						}
+						for(String texto:listaEleicoes) {
+							System.out.println(texto);
+						}
+						System.out.println("0- Cancelar");
+						int numTemp = leTeclado.pedeNumero("Id da eleição: ", 0, 999);
+						if(removerEleicao(numTemp)) {
+							
+						}
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					break;
 				case 3:
 					break;
 				case 4:
+					adicionarLista(selecionaEleicao());
 					break;
 				case 5:
+					removerLista(selecionaEleicao());
 					break;
 				case 6:
+					consultarLista(selecionaEleicao());
 					break;
 				case 7:
+					adicionarMesaVoto(selecionaEleicao());
 					break;
 				case 8:
+					removeMesaVoto(selecionaEleicao());
 					break;
 				case 9:
+					consultaMesaVoto(selecionaEleicao());
 					break;
 				case 0:
 					return;
@@ -307,6 +348,41 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 	}
 	
+	private int selecionaEleicao() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private void consultarLista(int numero) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void removerLista(int numero) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void adicionarLista(int numero) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void consultaMesaVoto(int numero) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void removeMesaVoto(int numero) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void adicionarMesaVoto(int numero) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public boolean criaUser() {
 		int nccTemp = leTeclado.pedeNumero("Número de cartão de cidadão: ", 9999999, 100000000);
 		try {
