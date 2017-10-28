@@ -19,8 +19,9 @@ public class AdminConsole extends UnicastRemoteObject{
 	 */
 	
 	private static final long serialVersionUID = 1L;
-	public static RMI_1 comunicacao;
+	public RMI_1 comunicacao;
 	public getScanner leTeclado;
+	public getOptions parametros;
 	
 	public AdminConsole() throws RemoteException{
 		/***
@@ -30,30 +31,46 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 		super();
 		leTeclado = new getScanner();
+		parametros = new getOptions();
 	}
 	
 	public static void main(String[] args){
 		/**
 		 * inicializa ligação com o RMI server e executa o menu
 		 */
+		
 		AdminConsole consola = null;
 		try {
 			consola = new AdminConsole();
-		} catch (RemoteException e1) {
-			e1.printStackTrace();
+		} catch (RemoteException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
 		}
-
-		try {
-			comunicacao = (RMI_1) Naming.lookup("rmi://127.0.0.1:7000/rmi");
-		} catch (RemoteException | MalformedURLException | NotBoundException  e) {
-			e.printStackTrace();
+		boolean teste = true;
+		while(teste) {
+			try {
+				
+				
+				consola.comunicacao = (RMI_1) Naming.lookup("rmi://"+consola.parametros.ipRmiServer+":"+consola.parametros.portRmiServer+"/rmi");
+				consola.menuInicial();
+				teste = false;
+				
+			} catch (RemoteException | MalformedURLException | NotBoundException  e) {
+				System.out.println("Perda de ligação com o servidor...");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		}
 		
-		consola.menuInicial();
+		
 
 	}
 	
-	public void menuInicial() {
+	public void menuInicial() throws RemoteException {
 		/**
 		 * menu inicial
 		 * @return void saída do menu inicial
@@ -83,6 +100,7 @@ public class AdminConsole extends UnicastRemoteObject{
 					menuEleicoes();
 					break;
 				case 5:
+					
 					break;
 				case 6:
 					break;
@@ -94,7 +112,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		}
 	}
 	
-	public void menuUtil() {
+	public void menuUtil() throws RemoteException{
 		while(true) {
 			System.out.println();
 			System.out.println("------------Sub Menu do Utilizador------------");
@@ -134,7 +152,7 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	
-	public void menuFac() {
+	public void menuFac()throws RemoteException{
 		while(true) {
 		 	System.out.println("------------Sub Menu das Faculdades------------");
 			System.out.println("1- Adicionar faculdade");
@@ -173,21 +191,17 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	
-	private boolean consultaFac() {
+	private boolean consultaFac() throws RemoteException {
 		
-		try {
-			for(String temp:comunicacao.ListFaculdades()) {
-				System.out.println(temp);				
-			}
-			return true;
-			
-		} catch (RemoteException e) {
-			e.printStackTrace();	
-		}	
-		return false;
+
+		for(String temp:comunicacao.ListFaculdades()) {
+			System.out.println(temp);				
+		}
+		return true;
+
 	}
 
-	public void menuDep() {
+	public void menuDep() throws RemoteException{
 		while(true) {
 			System.out.println("------------Sub Menu dos Departamentos------------");
 			System.out.println("1- Adicionar departamento");
@@ -231,7 +245,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 	}
 	
-	public void menuEleicoes() {
+	public void menuEleicoes() throws RemoteException {
 		while(true) {
 			System.out.println("------------Sub Menu das Eleições------------");
 			
@@ -258,8 +272,8 @@ public class AdminConsole extends UnicastRemoteObject{
 					System.out.println("1- Confirmar");
 					System.out.println("0- Cancelar");
 					if(leTeclado.pedeNumero("Opcão: ", 0, 1)==1) {
-						try {
 							comunicacao.criaEleicao(tipoTemp, horaInicioTemp, horaFim, titulo, descricao,numero);
+							comunicacao.addListaCandidatos((int)(Math.random()*1000-1), numero, "branco", "branco", "branco","branco", "branco");
 							boolean teste = true;
 							while (teste) {
 								System.out.println("1- Adicionar Mesa de voto");
@@ -267,7 +281,7 @@ public class AdminConsole extends UnicastRemoteObject{
 								System.out.println("3- Consultar Mesa de voto");
 								System.out.println("4- Adicionar Lista");
 								System.out.println("5- Remover Lista");
-								System.out.println("6- ConsultarLista");
+								System.out.println("6- Consultar Lista");
 								System.out.println("0- Sair");
 								
 								switch (leTeclado.pedeNumero("Opção: ", 0, 6)) {
@@ -294,14 +308,16 @@ public class AdminConsole extends UnicastRemoteObject{
 										break;
 								}
 							}
-						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					}
 					break;
 				case 2:
-					try {
+						if(comunicacao.removeEleicao(selecionaEleicao())) {
+							System.out.println("Eleição removida...");
+							break;
+						}
+						System.out.println("Eleição não encontrada...");
+					break;
+				case 3:
 						ArrayList<String> listaEleicoes = comunicacao.listEleicao();
 						if(listaEleicoes.isEmpty()) {
 							System.out.println("Sem eleições...");
@@ -310,17 +326,6 @@ public class AdminConsole extends UnicastRemoteObject{
 						for(String texto:listaEleicoes) {
 							System.out.println(texto);
 						}
-						System.out.println("0- Cancelar");
-						int numTemp = leTeclado.pedeNumero("Id da eleição: ", 0, 999);
-						if(removerEleicao(numTemp)) {
-							
-						}
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					break;
-				case 3:
 					break;
 				case 4:
 					adicionarLista(selecionaEleicao());
@@ -348,94 +353,255 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 	}
 	
-	private int selecionaEleicao() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	private void consultarLista(int numero) {
-		// TODO Auto-generated method stub
+	private int selecionaEleicao() throws RemoteException {
+		System.out.println("Eleições: ");
 		
+
+			ArrayList<String> listaEleicoes = comunicacao.listEleicao();
+			if(listaEleicoes.isEmpty()) {
+				System.out.println("Sem eleições...");
+				return 0;
+			}
+			int numTemp = 1;
+			for(String texto:listaEleicoes) {
+				System.out.println(numTemp+") "+texto);
+				numTemp++;
+			}
+			System.out.println("0) cancelar");
+			int numTemp1 = leTeclado.pedeNumero("Opção: ", 0, numTemp);
+			if(numTemp1==0) {
+				return 0;
+			}
+			
+			return Integer.parseInt(listaEleicoes.get(numTemp1-1).split(" - ")[5]);
 	}
 
-	private void removerLista(int numero) {
-		// TODO Auto-generated method stub
+	private void consultarLista(int numero) throws RemoteException {
+		if(numero==0) {return;}
+			System.out.println("Listas de candidatos:");
+			ArrayList <String> listaCandidatos = comunicacao.listListasCandidatos(numero);
+			if(listaCandidatos.isEmpty()) {
+				System.out.println("Sem lista de candidatos...");
+				return;
+			}
+			for(String texto:listaCandidatos) {
+				System.out.println(texto);
+				
+			}
+			leTeclado.leLinha("Continuar...");
+	}
+
+	private void removerLista(int numero) throws RemoteException {
+		if(numero==0) {return;}
 		
-	}
-
-	private void adicionarLista(int numero) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void consultaMesaVoto(int numero) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void removeMesaVoto(int numero) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void adicionarMesaVoto(int numero) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean criaUser() {
-		int nccTemp = leTeclado.pedeNumero("Número de cartão de cidadão: ", 9999999, 100000000);
-		try {
-			if (comunicacao.testeNCC(nccTemp)) {
-				
-				int telefoneTemp = leTeclado.pedeNumero("Contactos: ", 99999999, 1000000000);		//telefone
-				
-				String nomeTemp = leTeclado.leLinha("Nome: ");										//nome
-				
-				String passTemp = leTeclado.leLinha("Password: ");									//password
-				
-				String moradaTemp = leTeclado.leLinha("Morada: ");									//morada
-				
-				String dataccTemp = leTeclado.pedeData("Data cartão cidadão: ");					//Data CC
-				
-				
-				String listaTemp = "";
-				ArrayList <String> listaFaculdades1 = comunicacao.ListFaculdades();
-				for (String textoTemp:listaFaculdades1) {
-					if(listaTemp=="") {listaTemp = textoTemp.split(" - ")[1];}
-					else {listaTemp = listaTemp+";"+textoTemp.split(" - ")[1];}
-				}
-				
-				
-				String facTemp = leTeclado.mudaListaString("Faculdade: ", listaTemp);				//faculdade
-				
-				listaTemp = "";
-				listaFaculdades1 = comunicacao.ListDepartamentos(facTemp);
-				for (String textoTemp:listaFaculdades1) {
-					if(listaTemp=="") {listaTemp = textoTemp.split(" - ")[1];}
-					else {listaTemp = listaTemp+";"+textoTemp.split(" - ")[1];}
-				}
-				
-				String depTemp = leTeclado.mudaListaString("Departamento: ", listaTemp);
-				
-				String cargoTemp = leTeclado.mudaListaString("Cargo: ","aluno;docente;funcionario");
-				
-				System.out.println(comunicacao.registar(cargoTemp, nccTemp, dataccTemp, nomeTemp, passTemp, telefoneTemp, moradaTemp, facTemp, depTemp));
-				return true;
-				}
-		}catch(RemoteException e) {
-			return false;
+		System.out.println("Listas de candidatos:");
+		ArrayList <String> listaCandidatos = comunicacao.listListasCandidatos(numero);
+		if(listaCandidatos.isEmpty()) {
+			System.out.println("Sem lista de candidatos...");
+			return;
 		}
+		int numTemp = 1;
+		for(String texto:listaCandidatos) {
+			System.out.println(numTemp+"- "+texto);
+			numTemp++;
+		
+		}
+		System.out.println("0- cancelar");
+		int numTemp1 = leTeclado.pedeNumero("Opção: ", 0, numTemp);
+		if(numTemp1==0) {return;}
+		if(comunicacao.removeListaCandidatos(Integer.parseInt(listaCandidatos.get(numTemp1-1).split(" - ")[0]))) {
+			leTeclado.leLinha("Lista Removida...");
+			return;
+		}
+		leTeclado.leLinha("Lista Não Removida...");
+		
+	}
+
+	private void adicionarLista(int numero) throws RemoteException {
+		if(numero==0) {return;}
+		int numLista = leTeclado.pedeNumero("Numero da lista: ",0, 999);
+		String m1 = leTeclado.leLinha("Membro1: ");
+		String m2 = leTeclado.leLinha("Membro2: ");
+		String m3 = leTeclado.leLinha("Membro3: ");
+		String m4 = leTeclado.leLinha("Membro4: ");
+		String m5 = leTeclado.leLinha("Membro5: ");
+		System.out.println("1- Confirmar");
+		System.out.println("0- Cancelar");
+		if(leTeclado.pedeNumero("Opção: ", 0, 1)==1) {
+			System.out.println( comunicacao.addListaCandidatos(numLista, numero, m1, m2, m3, m4, m5));
+
+		}
+		leTeclado.leLinha("Continuar...");
+	}
+
+	private void consultaMesaVoto(int numero) throws RemoteException {
+		if(numero==0) {return;}
+		
+
+		ArrayList <String> listaDeMesas = comunicacao.listMesaVoto(numero);
+		for(String mesas:listaDeMesas) {
+			System.out.println(mesas);
+		}
+		
+		leTeclado.leLinha("Continuar...");
+		
+	}
+
+	private void removeMesaVoto(int numero) throws RemoteException {
+		// TODO Auto-generated method stub
+		if(numero==0) {return;}
+		
+		ArrayList <String> listaDeMesas = comunicacao.listMesaVoto(numero);
+		int numTemp = 1;
+		for(String mesas:listaDeMesas) {
+			System.out.println(numTemp+"- "+mesas);
+			numTemp++;
+		}
+		System.out.println("0- Cancelar");
+		int numTemp1 = leTeclado.pedeNumero("Opção: ", 0, numTemp);
+		if(numTemp1==0) {return;}
+		comunicacao.removeMesaVoto(Integer.parseInt(listaDeMesas.get(numTemp1-1).split(" - ")[0]));
+		leTeclado.leLinha("Continuar...");
+		
+	}
+
+	private void adicionarMesaVoto(int numero) throws RemoteException {
+		// TODO Auto-generated method stub
+		if(numero==0) {return;}
+		
+		int numMesaVoto = leTeclado.pedeNumero("Numero da mesa: ", 0, 999);
+		int numFac = escolheFaculdade();
+		int numDep = escolheDepartamento(numFac);
+		String user = leTeclado.leLinha("Username: ");
+		String pass = leTeclado.leLinha("Password: ");
+		int user1;
+		int user2;
+		int user3;
+		
+		System.out.println("Adicionar Membro a mesa de voto: ");
+		System.out.println("1- sim");
+		System.out.println("2- não");
+		if(leTeclado.pedeNumero("Opção: ", 0, 1)==1) {
+			user1 = leTeclado.pedeNumero("Nº do Cartão de Cidadão: ", 9999999, 100000000);
+			while(comunicacao.testeNCC(user1)==false) {
+				System.out.println("Numero invalido...");
+				user1 = leTeclado.pedeNumero("Nº do Cartão de Cidadão: ", 9999999, 100000000);
+			}
+			
+			System.out.println("Adicionar Membro a mesa de voto: ");
+			System.out.println("1- sim");
+			System.out.println("2- não");
+			if(leTeclado.pedeNumero("Opção: ", 0, 1)==1) {
+				user2 = leTeclado.pedeNumero("Nº do Cartão de Cidadão: ", 9999999, 100000000);
+				while(comunicacao.testeNCC(user2)==false) {
+					System.out.println("Numero invalido...");
+					user2 = leTeclado.pedeNumero("Nº do Cartão de Cidadão: ", 9999999, 100000000);
+				}
+				
+				System.out.println("Adicionar Membro a mesa de voto: ");
+				System.out.println("1- sim");
+				System.out.println("2- não");
+				if(leTeclado.pedeNumero("Opção: ", 0, 1)==1) {
+					
+					user3 = leTeclado.pedeNumero("Nº do Cartão de Cidadão: ", 9999999, 100000000);
+					while(comunicacao.testeNCC(user3)==false) {
+						System.out.println("Numero invalido...");
+						user3 = leTeclado.pedeNumero("Nº do Cartão de Cidadão: ", 9999999, 100000000);
+					}
+					
+				}
+				else {
+					
+				}
+			}
+			else {
+				
+			}
+		}
+		
+		System.out.println("1- Confirmar");
+		System.out.println("0- Cancelar");
+		if(leTeclado.pedeNumero("Opção: ", 0, 1)==1) {
+			leTeclado.leLinha(comunicacao.addMesaVoto(numMesaVoto, numDep, numFac, numero, user, pass));
+		}
+		
+		
+	}
+
+	private int escolheDepartamento(int numFac) throws RemoteException {
+		// TODO Auto-generated method stub
+		ArrayList <String> dep = comunicacao.ListDepartamentos(numFac);
+		int numTemp = 0;
+		if (dep.isEmpty()) {return 0;}
+		for(String tempTexto:dep) {
+			System.out.println(numTemp+"- "+tempTexto);
+			numTemp++;
+		}
+		return Integer.parseInt(dep.get(leTeclado.pedeNumero("Opção: ", 0, numTemp-1)).split(" - ")[2]);
+	}
+
+	private int escolheFaculdade() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+		ArrayList <String> fac = comunicacao.ListFaculdades();
+		int numTemp = 0;
+		if(fac.isEmpty()) {return 0;}
+		for(String tempTexto:fac) {
+			System.out.println(numTemp+"- "+tempTexto);
+			numTemp++;
+		}
+		return Integer.parseInt(fac.get(leTeclado.pedeNumero("Opção: ", 0, numTemp-1)).split(" - ")[2]);
+	}
+
+	public boolean criaUser() throws RemoteException {
+		int nccTemp = leTeclado.pedeNumero("Número de cartão de cidadão: ", 9999999, 100000000);
+		if (comunicacao.testeNCC(nccTemp)) {
+			
+			int telefoneTemp = leTeclado.pedeNumero("Contactos: ", 99999999, 1000000000);		//telefone
+			
+			String nomeTemp = leTeclado.leLinha("Nome: ");										//nome
+			
+			String passTemp = leTeclado.leLinha("Password: ");									//password
+			
+			String moradaTemp = leTeclado.leLinha("Morada: ");									//morada
+			
+			String dataccTemp = leTeclado.pedeData("Data cartão cidadão: ");					//Data CC
+			
+			
+			String listaTemp = "";
+			ArrayList <String> listaFaculdades1 = comunicacao.ListFaculdades();
+			for (String textoTemp:listaFaculdades1) {
+				if(listaTemp=="") {listaTemp = textoTemp.split(" - ")[1];}
+				else {listaTemp = listaTemp+";"+textoTemp.split(" - ")[1];}
+			}
+			
+			
+			String facTemp = leTeclado.mudaListaString("Faculdade: ", listaTemp);				//faculdade
+			
+			listaTemp = "";
+			listaFaculdades1 = comunicacao.ListDepartamentos(facTemp);
+			for (String textoTemp:listaFaculdades1) {
+				if(listaTemp=="") {listaTemp = textoTemp.split(" - ")[1];}
+				else {listaTemp = listaTemp+";"+textoTemp.split(" - ")[1];}
+			}
+			
+			String depTemp = leTeclado.mudaListaString("Departamento: ", listaTemp);
+			
+			String cargoTemp = leTeclado.mudaListaString("Cargo: ","aluno;docente;funcionario");
+			
+			System.out.println(comunicacao.registar(cargoTemp, nccTemp, dataccTemp, nomeTemp, passTemp, telefoneTemp, moradaTemp, facTemp, depTemp));
+			return true;
+			}
 		
 		return false;
 				
 		
 	}
 	
-	public boolean removeUser() {
+	public boolean removeUser() throws RemoteException {
 		
 		int tempNumero = leTeclado.pedeNumero("Introduza o número de cartão de cidadão: ", 9999999, 100000000);
-		try {
+
 			if(comunicacao.testeNCC(tempNumero)) {
 				String nome = comunicacao.getNome(tempNumero);
 				System.out.println("Nome: "+nome);
@@ -447,57 +613,35 @@ public class AdminConsole extends UnicastRemoteObject{
 					}										
 				}
 			}
-			
-		} catch (RemoteException e) {
-			e.printStackTrace();	
-		}
+
 		
 		return false;
 				
 		
 	}
 	
-	public String pedeFac() {
-		
-		
-		
-		return "";
-		
-	}
-	
-	public String pedeDep(String faculdade) {
-		return "";
-		
-	}
-	
-	public boolean consultaUser() {
+	public boolean consultaUser() throws RemoteException {
 		
 		int tempNumero = leTeclado.pedeNumero("Introduza o número de cartão de cidadão: ", 9999999, 100000000);
-		try {
-			if(comunicacao.testeNCC(tempNumero)) {
-				String nome = comunicacao.getNome(tempNumero);
-				System.out.println("Nome: "+nome);
-				System.out.println("1- Alterar");
-				System.out.println("0- voltar");
-				if(leTeclado.pedeNumero("Opção: ", 0, 1)==1) {
-					alteraUtilizador(tempNumero);
-				}
-				return true;
+
+		if(comunicacao.testeNCC(tempNumero)) {
+			String nome = comunicacao.getNome(tempNumero);
+			System.out.println("Nome: "+nome);
+			System.out.println("1- Alterar");
+			System.out.println("0- voltar");
+			if(leTeclado.pedeNumero("Opção: ", 0, 1)==1) {
+				alteraUtilizador(tempNumero);
 			}
-			else {
-				System.out.println("Utilizador não encontrado");
-				return false;
-			}
-				
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			
+			return true;
 		}
-		return false;
+		else {
+			System.out.println("Utilizador não encontrado");
+			return false;
+		}
 
 	}
 	
-	private void alteraUtilizador(int tempNumero) {
+	private void alteraUtilizador(int tempNumero) throws RemoteException {
 		while(true) {
 			System.out.println("1- Alterar Nome");
 			System.out.println("2- Alterar Password");
@@ -511,27 +655,18 @@ public class AdminConsole extends UnicastRemoteObject{
 			
 			switch (leTeclado.pedeNumero("Opção: ", 0, 8)) {
 			case 1:
-				try {
 					comunicacao.setNome(tempNumero, leTeclado.mudaString(comunicacao.getNome(tempNumero)));
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
+
 				break;
 			case 2:
-				try {
 					comunicacao.setPassword(tempNumero, leTeclado.mudaString(comunicacao.getPassword(tempNumero)));
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
 				break;
 			case 3:
-				try {
+
 					comunicacao.setTipoP(tempNumero, leTeclado.mudaListaString(comunicacao.getTipoP(tempNumero),"aluno;docente;funcionario"));
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
+				break;
 			case 4:
-				try {
+
 				 	String listaTemp = "";
 					ArrayList <String> listaFaculdades1 = comunicacao.ListFaculdades();
 					for (String textoTemp:listaFaculdades1) {
@@ -550,46 +685,32 @@ public class AdminConsole extends UnicastRemoteObject{
 					}
 					
 					comunicacao.setDepartamento(tempNumero, leTeclado.mudaListaString(comunicacao.getDepartamento(tempNumero), listaTemp));
-					
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
 				break;
 			case 5:
-				try {
-					String listaTemp = "";
+
+					String listaTemp1 = "";
 					ArrayList <String> listaFaculdades = comunicacao.ListDepartamentos(comunicacao.getFacudade(tempNumero));
 					for (String textoTemp:listaFaculdades) {
-						if(listaTemp=="") {listaTemp = textoTemp;}
-						else {listaTemp = listaTemp+";"+textoTemp;}
+						if(listaTemp1=="") {listaTemp = textoTemp;}
+						else {listaTemp = listaTemp1+";"+textoTemp;}
 					}
-					comunicacao.setDepartamento(tempNumero, leTeclado.mudaListaString(comunicacao.getDepartamento(tempNumero), listaTemp));
-					
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
+					comunicacao.setDepartamento(tempNumero, leTeclado.mudaListaString(comunicacao.getDepartamento(tempNumero), listaTemp1));
+
 				break;
 			case 6:
-				try {
+
 					comunicacao.setTelefone(tempNumero, leTeclado.mudaInt(comunicacao.getTelefone(tempNumero),99999999,1000000000));
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
+
 				break;
 			case 7:
-				try {
+
 					comunicacao.setMorada(tempNumero, leTeclado.mudaString(comunicacao.getMorada(tempNumero)));
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
 				break;
 			case 8:
-				try {
+
 					comunicacao.setDataCC(tempNumero, leTeclado.pedeData(comunicacao.getDataCC(tempNumero)));
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
+
 				break;
 			case 0:
 				return;
@@ -598,7 +719,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		
 	}
 
-	public String tipoEleicao() {
+	public String tipoEleicao() throws RemoteException{
 		System.out.println("Escolha o tipo de eleição:");
 		System.out.println("1- Núcleo de Estudantes");
 		System.out.println("2- Conselho Geral");
@@ -617,7 +738,7 @@ public class AdminConsole extends UnicastRemoteObject{
 		return "";
 	}
 	
-	public boolean criaFac() {
+	public boolean criaFac() throws RemoteException {
 		
 		String nomeFaculd = leTeclado.leLinha("Nome da faculadade: ");
 		String sigla = leTeclado.leLinha("Sigla da faculdade: ");
@@ -627,21 +748,17 @@ public class AdminConsole extends UnicastRemoteObject{
 		System.out.println("0- Cancelar");
 		
 		if(leTeclado.pedeNumero("Opção: ", 0, 1)== 1) {
-			try {
 				if(comunicacao.addFaculdade(sigla, nomeFaculd, id)) {
 					return true;
-				}
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}		
+				}	
 		}
 		return false;
 	}
 
-	public boolean removeFac() {
+	public boolean removeFac() throws RemoteException {
 		
 		int idFac=0;
-		try {
+
 			for(String temp:comunicacao.ListFaculdades()) {
 				System.out.println(temp);				
 			}
@@ -650,31 +767,25 @@ public class AdminConsole extends UnicastRemoteObject{
 				if(idFac==0) {return false;}
 			}
 			while (!comunicacao.removeFaculdade(idFac));
-			
-		} catch (RemoteException e) {
-			e.printStackTrace();	
-		}	
+	
 		return true;
 	}
 	
 	
-	public boolean consultaDep() {
-		try {
+	public boolean consultaDep() throws RemoteException {
+
 			for(String dep:comunicacao.ListDepartamentos()) {
 				System.out.println(dep);				
 			}
 			return true;
-			
-		} catch (RemoteException e) {
-			e.printStackTrace();	
-		}	
-		return false;		
+
+
 	}
 	
-	public boolean removeDep() {
+	public boolean removeDep() throws RemoteException {
 		
 		int idDep_2=0;
-		try {
+
 			for(String temp_2:comunicacao.ListDepartamentos()) {
 				System.out.println(temp_2);				
 			}
@@ -684,14 +795,12 @@ public class AdminConsole extends UnicastRemoteObject{
 			}
 			while (!comunicacao.removeDepartamento(idDep_2));
 			
-		} catch (RemoteException e) {
-			e.printStackTrace();	
-		}	
+
 		return true;
 			
 	}
 	
-	public boolean criaDep() {
+	public boolean criaDep() throws RemoteException {
 		
 		String sigla = leTeclado.leLinha("Sigla do departamento: ");
 		String nomeDepart = leTeclado.leLinha("Nome do departamento: ");
@@ -700,12 +809,9 @@ public class AdminConsole extends UnicastRemoteObject{
 		String listaTemp = "";
 		ArrayList<String> listaFaculdades1 = null;
 		
-		try {
+
 			listaFaculdades1 = comunicacao.ListFaculdades();
-		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
 		
 		for (String textoTemp:listaFaculdades1) {
 			if(listaTemp=="") {listaTemp = textoTemp;}
@@ -718,13 +824,11 @@ public class AdminConsole extends UnicastRemoteObject{
 		System.out.println("0- Cancelar");
 		
 		if(leTeclado.pedeNumero("Opção: ", 0, 1)== 1) {
-			try {
+
 				if(comunicacao.addDepartamento(sigla, nomeDepart, id, Integer.parseInt(facTemp.split(" - ")[2]) )) {
 					return true;
 				}
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}		
+		
 		}
 		return false;
 		
