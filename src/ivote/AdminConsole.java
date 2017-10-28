@@ -354,37 +354,153 @@ public class AdminConsole extends UnicastRemoteObject{
 	}
 	
 	private int selecionaEleicao() {
-		// TODO Auto-generated method stub
+		System.out.println("Eleições: ");
+		
+		try {
+			ArrayList<String> listaEleicoes = comunicacao.listEleicao();
+			if(listaEleicoes.isEmpty()) {
+				System.out.println("Sem eleições...");
+				return 0;
+			}
+			int numTemp = 1;
+			for(String texto:listaEleicoes) {
+				System.out.println(numTemp+") "+texto);
+				numTemp++;
+			}
+			System.out.println("0) cancelar");
+			int numTemp1 = leTeclado.pedeNumero("Opção: ", 0, numTemp);
+			if(numTemp1==0) {
+				return 0;
+			}
+			
+			return Integer.parseInt(listaEleicoes.get(numTemp1-1).split(" - ")[5]);
+			
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		return 0;
 	}
 
 	private void consultarLista(int numero) {
-		// TODO Auto-generated method stub
-		
+		if(numero==0) {return;}
+		try {
+			System.out.println("Listas de candidatos:");
+			ArrayList <String> listaCandidatos = comunicacao.listListasCandidatos(numero);
+			if(listaCandidatos.isEmpty()) {
+				System.out.println("Sem lista de candidatos...");
+				return;
+			}
+			for(String texto:listaCandidatos) {
+				System.out.println(texto);
+				leTeclado.leLinha("Continuar...");
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void removerLista(int numero) {
-		// TODO Auto-generated method stub
+		if(numero==0) {return;}
+		
+		try {
+			System.out.println("Listas de candidatos:");
+			ArrayList <String> listaCandidatos = comunicacao.listListasCandidatos(numero);
+			if(listaCandidatos.isEmpty()) {
+				System.out.println("Sem lista de candidatos...");
+				return;
+			}
+			int numTemp = 1;
+			for(String texto:listaCandidatos) {
+				System.out.println(numTemp+"- "+texto);
+				numTemp++;
+			
+			}
+			System.out.println("0- cancelar");
+			int numTemp1 = leTeclado.pedeNumero("Opção: ", 0, numTemp);
+			if(numTemp1==0) {return;}
+			if(comunicacao.removeListaCandidatos(Integer.parseInt(listaCandidatos.get(numTemp1-1).split(" - ")[0]))) {
+				leTeclado.leLinha("Lista Removida...");
+				return;
+			}
+			leTeclado.leLinha("Lista Não Removida...");
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
 	private void adicionarLista(int numero) {
-		// TODO Auto-generated method stub
-		
+		if(numero==0) {return;}
+		int numLista = leTeclado.pedeNumero("Numero da lista: ",0, 999);
+		String m1 = leTeclado.leLinha("Membro1: ");
+		String m2 = leTeclado.leLinha("Membro2: ");
+		String m3 = leTeclado.leLinha("Membro3: ");
+		String m4 = leTeclado.leLinha("Membro4: ");
+		String m5 = leTeclado.leLinha("Membro5: ");
+		System.out.println("1- Confirmar");
+		System.out.println("0- Cancelar");
+		if(leTeclado.pedeNumero("Opção: ", 0, 1)==1) {
+			try {
+				System.out.println( comunicacao.addListaCandidatos(numLista, numero, m1, m2, m3, m4, m5));
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		leTeclado.leLinha("Continuar...");
 	}
 
 	private void consultaMesaVoto(int numero) {
-		// TODO Auto-generated method stub
+		if(numero==0) {return;}
+		
+		try {
+			ArrayList <String> listaDeMesas = comunicacao.listMesaVoto(numero);
+			for(String mesas:listaDeMesas) {
+				System.out.println(mesas);
+			}
+			
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		leTeclado.leLinha("Continuar...");
 		
 	}
 
 	private void removeMesaVoto(int numero) {
 		// TODO Auto-generated method stub
+		if(numero==0) {return;}
+		
+		try {
+			ArrayList <String> listaDeMesas = comunicacao.listMesaVoto(numero);
+			int numTemp = 1;
+			for(String mesas:listaDeMesas) {
+				System.out.println(numTemp+"- "+mesas);
+				numTemp++;
+			}
+			System.out.println("0- Cancelar");
+			int numTemp1 = leTeclado.pedeNumero("Opção: ", 0, numTemp);
+			if(numTemp1==0) {return;}
+			comunicacao.removeMesaVoto(Integer.parseInt(listaDeMesas.get(numTemp1-1).split(" - ")[0]));
+			
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		leTeclado.leLinha("Continuar...");
 		
 	}
 
 	private void adicionarMesaVoto(int numero) {
 		// TODO Auto-generated method stub
+		if(numero==0) {return;}
+		
+		
 		
 	}
 
