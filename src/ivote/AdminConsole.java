@@ -302,6 +302,18 @@ public class AdminConsole extends UnicastRemoteObject{
 					break;
 				case 2:
 					try {
+						if(comunicacao.removeEleicao(selecionaEleicao())) {
+							System.out.println("Eleição removida...");
+							break;
+						}
+						System.out.println("Eleição não encontrada...");
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+				case 3:
+					try {
 						ArrayList<String> listaEleicoes = comunicacao.listEleicao();
 						if(listaEleicoes.isEmpty()) {
 							System.out.println("Sem eleições...");
@@ -310,17 +322,10 @@ public class AdminConsole extends UnicastRemoteObject{
 						for(String texto:listaEleicoes) {
 							System.out.println(texto);
 						}
-						System.out.println("0- Cancelar");
-						int numTemp = leTeclado.pedeNumero("Id da eleição: ", 0, 999);
-						if(removerEleicao(numTemp)) {
-							
-						}
 					} catch (RemoteException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					break;
-				case 3:
 					break;
 				case 4:
 					adicionarLista(selecionaEleicao());

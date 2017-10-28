@@ -1898,6 +1898,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			st = conn.createStatement();
 			String sql = comand;
 			ResultSet rs = st.executeQuery(sql);
+			conn.commit();
 			return rs;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
