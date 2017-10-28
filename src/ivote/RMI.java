@@ -1865,7 +1865,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		// TODO Auto-generated method stub
 	}
 
-	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int voto)
+	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int voto, int eleicao)
 			throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
