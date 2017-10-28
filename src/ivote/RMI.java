@@ -819,7 +819,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return mesas;
 	}
 	
-//TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//TERMINAR E TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public ArrayList<String> detalheEleicao(int eleicao) throws RemoteException {
 		ArrayList<String> detalhe = new ArrayList<String>();
 		try {
@@ -1124,21 +1124,34 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	public ArrayList <String> localVotoEleitor(int numCC) throws RemoteException {
 		
 	}
-	
-	public String estadoMesas(String mesaVoto) throws RemoteException {
-		
-	}
-	
-	public String eleitoresTReal(int id_eleicao) throws RemoteException {
-		
-	}
 
-	public String terminoEleicao(int id_eleicao) throws RemoteException {
-	
-	}
-
-	public String consultaResulPass(int id_eleicao) throws RemoteException {
-		
+	public ArrayList<String> consultaResulPass(int id_eleicao) throws RemoteException {
+		ArrayList<String> eleicoesPassadas = new ArrayList<String>();
+		try {
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			String sql = "select * from eleicao where id = '"+id_eleicao+"'";
+			ResultSet rs = st.executeQuery(sql);
+			while (rs.next()) {
+			    listaMesas.add(rs.getInt(1)+" - "+rs.getInt(2)+" - "+rs.getInt(3));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return listaMesas;
 	}
 	*/
 	
