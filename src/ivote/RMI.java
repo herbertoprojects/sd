@@ -1841,6 +1841,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	
 //TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public String ligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
+		
 		int contador = 0;
 		try {
 			conn.setAutoCommit(false);
