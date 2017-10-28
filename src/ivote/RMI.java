@@ -20,6 +20,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	
 	getOptions parametrosEntrada;
 	boolean debug_teste = true;
+	public ArrayList <String> mesasAbertas;
 	
 	protected RMI() throws RemoteException {
 		super();
@@ -54,8 +55,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		
+		}		
 		server.primario(server.parametrosEntrada.portRmiServer);
 		
 	}
@@ -72,6 +72,10 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "proj", "proj");
 			System.out.println("Conectado há base de dados"+conn);
+			while(true) {
+				gereEleicoes();
+			}
+			
 		} catch(RemoteException | MalformedURLException | SQLException  | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -138,7 +142,61 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 		
 	}
+	
+	public void gereEleicoes() {
+		ArrayList <String> listaDeMesas = listaMesaVotosAbertas();
+		
+		if(listaDeMesas.isEmpty()) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return;
+		}
+		
+		for(String tempMesa:listaDeMesas) {
+			try {
+				if(!mesasAbertas.contains(tempMesa)) {
+					mesasAbertas.add(tempMesa);
+					System.out.println("Abriu a mesa "+tempMesa.split(";")[0]+" da eleicao"+tempMesa.split(";")[3]);
+					if(tempMesa.split(";")[0]!= null) {
+						Naming.rebind("rmi://localhost:"+parametrosEntrada.portRmiServer+"/"+tempMesa.split(";")[0]+"", this);
+					}
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
+	public ArrayList <String> listaMesaVotosAbertas(){
+		ArrayList <String> mesasDeVoto= new ArrayList <String>(); 
+		
+		ResultSet rs = comandoSql("select mesavoto.USERN,mesavoto.PASS,ELEICAO.ID,ELEICAO.TITULO from mesavoto,ELEICAO where mesavoto.ID_Eleicao = eleicao.id and ELEICAO.DATAINICIO < CURRENT_TIMESTAMP and ELEICAO.DATAFim > CURRENT_TIMESTAMP");
+		
+		try {
+			while (rs.next()) {
+				mesasDeVoto.add(rs.getString(1)+";"+rs.getString(2)+";"+rs.getString(3)+";"+rs.getString(4));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mesasDeVoto;
+	}
 	
 	public String registar(String tipo, int numeroCc, String dataCc, String nome, String password, int telefone, String morada, String no_faculd, String no_depart) throws RemoteException {
 		try {

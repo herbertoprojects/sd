@@ -233,19 +233,55 @@ public class AdminConsole extends UnicastRemoteObject{
 	public void menuEleicoes() {
 		while(true) {
 			System.out.println("------------Sub Menu das Eleições------------");
-			System.out.println("1- Criar eleição");
-			System.out.println("2- Adicionar listas");
-			System.out.println("3- Remover listas");
-			System.out.println("4- Consultar listas");
-			System.out.println("5- Remover eleições");
-			System.out.println("6- Consultar eleições");
 			
-			switch(leTeclado.pedeNumero("Opção: ", 0, 6)) {
+			System.out.println("1- Criar eleição");
+			System.out.println("2- Remover eleições");
+			System.out.println("3- Consultar eleições");
+			System.out.println("4- Adicionar listas");
+			System.out.println("5- Remover listas");
+			System.out.println("6- Consultar listas");
+			System.out.println("7- Adicionar mesa de voto");
+			System.out.println("8- remover mesa de voto");
+			System.out.println("9- Consultar mesas de voto");
+			System.out.println("0- Sair");
+			
+			switch(leTeclado.pedeNumero("Opção: ", 0, 9)) {
 				case 1:
 					String tipoTemp = tipoEleicao();
 					String horaInicioTemp = leTeclado.pedeDataHora("Data de Inicio: ");
 					String horaFim = leTeclado.pedeDataHora("Data de Fim: ");
+					String titulo = leTeclado.leLinha("Titulo: ");
+					String descricao = leTeclado.leLinha("Descrição: ");
+					int numero = leTeclado.pedeNumero("Id: ",0, 999);
 					
+					System.out.println("1- Confirmar");
+					System.out.println("0- Cancelar");
+					if(leTeclado.pedeNumero("Opcão: ", 0, 1)==1) {
+						try {
+							comunicacao.criaEleicao(tipoTemp, horaInicioTemp, horaFim, titulo, descricao,numero);
+							while (true) {
+								System.out.println("1- Adicionar Mesa de voto");
+								System.out.println("2- Remover Mesa de voto");
+								System.out.println("3- Consultar Mesa de voto");
+								System.out.println("4- Adicionar Mesa de voto");
+								System.out.println("5- Adicionar Mesa de voto");
+								System.out.println("6- Adicionar Mesa de voto");
+								System.out.println("0- Sair");
+								
+								switch (leTeclado.pedeNumero(, minNum, maxNum)) {
+								case value:
+									
+									break;
+
+								default:
+									break;
+								}
+							}
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 					break;
 				case 2:
 					break;
@@ -256,6 +292,12 @@ public class AdminConsole extends UnicastRemoteObject{
 				case 5:
 					break;
 				case 6:
+					break;
+				case 7:
+					break;
+				case 8:
+					break;
+				case 9:
 					break;
 				case 0:
 					return;
