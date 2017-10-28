@@ -1014,7 +1014,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 	
 	/*
-	public ArrayList <String> localVotoEleitor(String nome, int numCC, int telefone) throws RemoteException {
+	public ArrayList <String> localVotoEleitor(int numCC) throws RemoteException {
 		
 	}
 	
@@ -1022,15 +1022,15 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		
 	}
 	
-	public String eleitoresTReal() throws RemoteException {
+	public String eleitoresTReal(int id_eleicao) throws RemoteException {
 		
 	}
 
-	public String terminoEleicao() throws RemoteException {
+	public String terminoEleicao(int id_eleicao) throws RemoteException {
 	
 	}
 
-	public String consultaResulPass(String eleicao) throws RemoteException {
+	public String consultaResulPass(int id_eleicao) throws RemoteException {
 		
 	}
 	*/
@@ -1604,11 +1604,44 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	}
 	
 
-	/*
-	public boolean votaAntecipadamente(int nCC, String passwordUser) throws RemoteException {
-		
+	public boolean votaAntecipadamente(int nCC, String passwordUser, int id_elei) throws RemoteException {
+		ResultSet rs;
+		// TODO Auto-generated method stub
+		int contador = 0;
+		try {
+			rs = comandoSql("select count(*) from pessoa where numeroCc = '"+nCC+"' and password = '"+passwordUser+"'");
+			rs.next();
+			contador = rs.getInt(1);
+			if(contador==1) {
+				ResultSet rss;
+				int n_totalVotos;
+				rss = comandoSql("select total_votos from PESSOASLISTA where ID_ELEICAO = "+id_elei+"");
+				rss.next();
+				n_totalVotos = rss.getInt(1)+1;
+				comandoSql("update PESSOASLISTA values total_votos = "+n_totalVotos+ "where ID_ELEICAO = "+id_elei+"");
+				comandoSql("update voto values voto(numVoto) = 1 where id_pessoa = "+nCC+"");
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			return false;
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
-	*/
 	
 	private int nmtoidDepart(String nome_b)throws RemoteException {
 		int tempNum = 0;
@@ -1797,10 +1830,49 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		// TODO Auto-generated method stub
 	}
 
-	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int voto)
+	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int id_elei)
 			throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {
+			ResultSet rs;
+			// TODO Auto-generated method stub
+			int contador = 0;
+			try {
+				rs = comandoSql("select count(*) from pessoa where numeroCc = '"+nCC+"' and password = '"+passwordUser+"'");
+				rs.next();
+				contador = rs.getInt(1);
+				if(contador==1) {
+					ResultSet rss;
+					int n_totalVotos;
+					rss = comandoSql("select total_votos from PESSOASLISTA where ID_ELEICAO = "+id_elei+"");
+					rss.next();
+					n_totalVotos = rss.getInt(1)+1;
+					comandoSql("update PESSOASLISTA values total_votos = "+n_totalVotos+ "where ID_ELEICAO = "+id_elei+"");
+					comandoSql("update voto values voto(numVoto) = 1 where id_pessoa = "+nCC+"");
+					return true;
+				} else {
+					return false;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				return false;
+			} finally {
+				try {
+					conn.setAutoCommit(true);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		else {
+			return false;
+		}
 	}
 
 	public ArrayList<String> ListDepartamentos(String faculdadeTemp) throws RemoteException {

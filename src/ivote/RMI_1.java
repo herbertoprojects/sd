@@ -143,10 +143,11 @@ public interface RMI_1 extends Remote{
 	public String removeMembroMesaVoto(int mesaVoto) throws RemoteException;
 	public ArrayList <String> listaMembrosMesaVoto(int id_mesaVoto) throws RemoteException;
 	
-	/*
+
 	//voto antecipado
-	public boolean votaAntecipadamente(int nCC, String passwordUser) throws RemoteException;
+	public boolean votaAntecipadamente(int nCC, String passwordUser, int id_elei) throws RemoteException;
 	
+	/*
 	//Metodos para servidor TCP
 	//todas as comunicações terao de ser autenticadas por questao de seguranca
 	//-Ligar-se
@@ -167,7 +168,7 @@ public interface RMI_1 extends Remote{
 	//verificar se o user está bloqueado a esta mesa de voto
 	//verificar se a password corresponde
 	
-	public boolean votar(String nomeMesaVoto,String passwordMesaVoto, int nCC, String passwordUser, int voto) throws RemoteException;
+	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int id_elei) throws RemoteException;
 	//verificar se o user esta bloqueado a esta mesa de voto
 	//verificar se a password corresponde
 	//inserir o voto
