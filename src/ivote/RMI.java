@@ -602,11 +602,22 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
-	public void mensagemRealTime(int eleicao,dadosEleicoes imprimir) throws Exception {
+//TERMINAR E TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public void mensagemRealTime(int eleicao, dadosEleicoes imprimir) throws Exception {
 		//TODO Por Acabar
+		ResultSet rs;
 		try {
-			imprimir.imprimeTexto("Teste");
-		} catch (RemoteException e) {
+			rs = comandoSql("select id_pessoa from voto where numvoto = 1");
+			System.out.println("Pessoas que já votaram");
+			while(rs.next()) {
+				System.out.println(rs.getInt(1));
+			}
+			rs = comandoSql("select id_pessoa from voto where numvoto = 0");
+			System.out.println("Pessoas que não votaram");
+			while(rs.next()) {
+				System.out.println(rs.getInt(1));
+			}
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -804,12 +815,36 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return mesas;
 	}
 	
-	/*
-	public String detalheEleicao(String eleicao) throws RemoteException {
-		
+//TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public ArrayList<String> detalheEleicao(int eleicao) throws RemoteException {
+		ArrayList<String> detalhe = new ArrayList<String>();
+		try {
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			String sql = "select * from eleicao where id = ('"+eleicao+"')";
+			ResultSet rs = st.executeQuery(sql);
+			while(rs.next()) {
+				detalhe.add(rs.getString(1)+" - "+rs.getString(2)+" - "+rs.getString(3)+" - "+rs.getString(4)+" - "+rs.getString(5)+" - "+rs.getInt(6));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return detalhe;
 	}
 	
-	*/
 	
 	public String getTipo(int id_elei) throws RemoteException {
 		String tipo = "";
@@ -1671,13 +1706,13 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return listaMesas;
 	}
 	
-
-	public boolean votaAntecipadamente(int nCC, String passwordUser, int id_elei) throws RemoteException {
+//TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public boolean votaAntecipadamente(int nCC, int id_elei) throws RemoteException {
 		ResultSet rs;
 		// TODO Auto-generated method stub
 		int contador = 0;
 		try {
-			rs = comandoSql("select count(*) from pessoa where numeroCc = '"+nCC+"' and password = '"+passwordUser+"'");
+			rs = comandoSql("select count(*) from pessoa where numeroCc = "+nCC+"");
 			rs.next();
 			contador = rs.getInt(1);
 			if(contador==1) {
@@ -1800,6 +1835,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
+//TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public String ligarServidor(String nomeMesaVoto, String passwordMesaVoto) throws RemoteException {
 		int contador = 0;
 		try {
@@ -1838,6 +1874,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
+//TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public boolean desbloquearUser(String nomeMesaVoto, String passwordMesaVoto, int nCC, int elect) throws RemoteException {
 		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {
 			int contador = 0;
@@ -1876,6 +1913,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		return false;
 	}
 
+//TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public boolean desbloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, int id_elect)
 			throws RemoteException {
 		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {
@@ -1887,6 +1925,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		// TODO Auto-generated method stub
 	}
 
+//TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public boolean bloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, int id_elect)
 			throws RemoteException {
 		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {
@@ -1898,6 +1937,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		// TODO Auto-generated method stub
 	}
 
+//TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int id_elei)
 			throws RemoteException {
 		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {

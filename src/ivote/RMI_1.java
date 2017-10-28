@@ -146,7 +146,7 @@ public interface RMI_1 extends Remote{
 	
 
 	//voto antecipado
-	public boolean votaAntecipadamente(int nCC, String passwordUser, int id_elei) throws RemoteException;
+	public boolean votaAntecipadamente(int nCC, int id_elei) throws RemoteException;
 	
 	/*
 	//Metodos para servidor TCP
