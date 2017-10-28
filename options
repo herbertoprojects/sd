@@ -1,5 +1,5 @@
 ipServerTcp:127.0.0.1
-portServerTcp:1220
+portServerTcp:1221
 ipRmiServer:127.0.0.1
 portRmiServer:7000
 ipRmiServer_2:127.0.0.1

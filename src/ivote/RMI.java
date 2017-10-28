@@ -604,6 +604,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 	
 //TERMINAR E TESTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public void mensagemRealTime(int eleicao, dadosEleicoes imprimir) throws Exception {
+	public void mensagemRealTime(int eleicao,dadosEleicoes imprimir) throws RemoteException {
 		//TODO Por Acabar
 		ResultSet rs;
 		try {

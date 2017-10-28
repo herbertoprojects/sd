@@ -1,9 +1,11 @@
 package ivote;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -32,35 +34,39 @@ public class ServerTCP extends UnicastRemoteObject{
 		new cabecalhoProg();
 		servidorTCP.opcoes = new getOptions();
 		
-		
-		//Activar politicas de ligacao6+66+
+		//Activar politicas de ligacao
 		servidorTCP.ativaPrivilegios();
 		
 		//Cria comunicacao com servidor RMI
-		servidorTCP.ativaConnectionRMI();
 		
-		//comunicacao com a mesa de voto (nova thread)
-		//servidorTCP.comunication = new aceptTerminalVoto(servidorTCP.server, servidorTCP.opcoes, servidorTCP.listaDeTerminais, servidorTCP.comunicacaoRMI,servidorTCP);
-		//evocar menu e guardar
-		servidorTCP.menuInterface = new userInterface(servidorTCP.comunicacaoRMI);
-		
-		// binding ao porto tcp
-		servidorTCP.aceptTerminalVoto();
-		
-
+		try {
+		servidorTCP.ativaConnectionRMI(new getScanner().leLinha("Nome da mesa de voto: "));
+				//comunicacao com a mesa de voto (nova thread)
+				//servidorTCP.comunication = new aceptTerminalVoto(servidorTCP.server, servidorTCP.opcoes, servidorTCP.listaDeTerminais, servidorTCP.comunicacaoRMI,servidorTCP);
+				//evocar menu e guardar
+				servidorTCP.menuInterface = new userInterface(servidorTCP.comunicacaoRMI);
+				
+				// binding ao porto tcp
+				servidorTCP.aceptTerminalVoto();
+		}catch (RemoteException e) {
+			System.out.println("Impossivel ligar ao servidor...");
+		}
 	}
 	
 	public void ativaPrivilegios() {
 		System.getProperties().put("java.security.policy", "policy.all");
 		System.setSecurityManager(new RMISecurityManager());
 	}
-	public void ativaConnectionRMI() {
-		try {
-			comunicacaoRMI = (RMI_1) Naming.lookup("rmi://"+opcoes.ipRmiServer+":"+opcoes.portRmiServer+"/DepartamentoInformatica");
-		}catch (Exception e) {
-			System.out.println("Exception in main: " + e);
-			//e.printStackTrace();
-		}
+	public void ativaConnectionRMI(String nome) throws RemoteException {
+			try {
+				comunicacaoRMI = (RMI_1) Naming.lookup("rmi://"+opcoes.ipRmiServer+":"+opcoes.portRmiServer+"/"+nome+"");
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	public void aceptTerminalVoto() {
@@ -76,7 +82,7 @@ public class ServerTCP extends UnicastRemoteObject{
 				if(mesasLivres()) {
 					System.out.println("Espera de terminal...");
 					Socket cliente = server.accept();
-					new threadClienteTCP(this.menuInterface.listaDeTerminais, cliente);
+					new threadClienteTCP(this.menuInterface.listaDeTerminais, cliente, this.menuInterface.numEleicao);
 				}else {
 					break;
 				}

@@ -16,14 +16,16 @@ public class threadClienteTCP extends Thread {
 	public ArrayList <terminalVoto> listaDeTerminais;
 	public terminalVoto terminalAssociado = null;
 	public Socket cliente;
+	public int numEleicao;
 	
 	public BufferedReader readMesa;
 	public PrintWriter writeMesa;
 	
-	public threadClienteTCP(ArrayList <terminalVoto> listaDeTerminais, Socket cliente) {
+	public threadClienteTCP(ArrayList <terminalVoto> listaDeTerminais, Socket cliente, int numEleicao) {
 		// TODO Auto-generated constructor stub
 		this.listaDeTerminais = listaDeTerminais;
 		this.cliente = cliente;
+		this.numEleicao = numEleicao;
 		this.start();
 	}
 	@Override
@@ -39,7 +41,12 @@ public class threadClienteTCP extends Thread {
 			
 			while(true) {
 				String texto = readMesa.readLine();
-				writeMesa.println(executaComando(texto));
+				String textoRecebido = executaComando(texto);
+				writeMesa.println(textoRecebido);
+				if(textoRecebido.equalsIgnoreCase("type|message;text|Utilizador autenticado")) {
+					imprimeListaCandidatos();
+				}
+				
 				if(tentativas == 0) {
 					cliente.close();
 					return;
@@ -73,6 +80,19 @@ public class threadClienteTCP extends Thread {
 		}
 	}
 	
+	private void imprimeListaCandidatos() {
+		// TODO Auto-generated method stub
+		try {
+			ArrayList<String> listas = terminalAssociado.comunicacao.listListasCandidatos(numEleicao);
+			for(String textoTemp:listas) {
+				writeMesa.println(textoTemp);
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	private String executaComando(String texto) {
 		
 		ArrayList <String []> textos = new ArrayList<String []>();
@@ -149,7 +169,7 @@ public class threadClienteTCP extends Thread {
 		if(textos.size()==2) {
 			try {
 				terminalAssociado.passCliente = textos.get(1)[1];
-				if(terminalAssociado.comunicacao.desbloquearVoto(terminalAssociado.nome, terminalAssociado.password,terminalAssociado.nccCLiente, terminalAssociado.passCliente)) {
+				if(terminalAssociado.comunicacao.desbloquearVoto(terminalAssociado.nome, terminalAssociado.password,terminalAssociado.nccCLiente,numEleicao)) {
 					terminalAssociado.vote = true;
 				}	
 			} catch (RemoteException e) {
@@ -168,7 +188,7 @@ public class threadClienteTCP extends Thread {
 				int numTemp;
 				try {
 					numTemp = Integer.parseInt(textos.get(1)[1]);
-					if(terminalAssociado.comunicacao.votar(terminalAssociado.nome, terminalAssociado.password, terminalAssociado.nccCLiente, terminalAssociado.passCliente,numTemp)) {
+					if(terminalAssociado.comunicacao.votar(terminalAssociado.nome, terminalAssociado.password, terminalAssociado.nccCLiente, terminalAssociado.passCliente,numEleicao,numTemp)) {
 						terminalAssociado.nccCLiente = 0;
 						terminalAssociado.passCliente = "";
 						terminalAssociado.vote = false;

@@ -11,7 +11,7 @@ public class userInterface extends Thread {
 	public String password = "";
 	public LocalDateTime data_ligado;
 	public ArrayList <terminalVoto> listaDeTerminais = new ArrayList<terminalVoto>();//sincronizado
-	
+	public int numEleicao;
 	public getScanner leitorTeclado = new getScanner();
 	
 	
@@ -40,8 +40,10 @@ public class userInterface extends Thread {
 					System.out.println("Servidor desligado...");
 					break;
 				case 2:
-					if(ligaEleicao()) {
+					String eleicao = ligaEleicao();
+					if(eleicao!=null) {
 						data_ligado = LocalDateTime.now();
+						numEleicao = Integer.parseInt(eleicao);
 						this.menuLigado();
 					}
 					break;
@@ -142,7 +144,7 @@ public class userInterface extends Thread {
 								System.out.println("1) Confirmar");
 								System.out.println("0) Cancelar");
 								if(leitorTeclado.pedeNumero("Opção: ", 0, 1)==1) {
-									if(comunicacaoRMI.desbloquearUser(username, password,numCC )){
+									if(comunicacaoRMI.desbloquearUser(username, password,numCC,numEleicao )){
 										terminalVoto temp = procuraTerminalVazio();
 										temp.nccCLiente = numCC;
 										synchronized(temp.threadAssociada) {
@@ -174,7 +176,7 @@ public class userInterface extends Thread {
 		}
 	}
 	
-	public boolean ligaEleicao() {
+	public String ligaEleicao() {
 		username = leitorTeclado.leLinha("Username: ");
 		password = leitorTeclado.leLinha("Password: ");
 		
@@ -183,7 +185,7 @@ public class userInterface extends Thread {
 		} catch (RemoteException|NullPointerException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Sem possiblidade de ligar ao servidor rmi...");
-			return false;
+			return "";
 			//e.printStackTrace();
 		}
 		
