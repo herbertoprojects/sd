@@ -40,6 +40,7 @@ public interface RMI_1 extends Remote{
 	//Criar eleição; Tipo->núcleo de estudantes, conselho geral, direção de departamento, direção de faculdade
 	//tipo de eleição -> NEstudante CGeral DDepartamento DFaculdade
 	public String criaEleicao(String tipo, String inicio, String fim, String titulo, String descricao, int id) throws RemoteException; // retorna o número da eleição
+	public boolean removeEleicao(int id_eleicao) throws RemoteException;
 	public ArrayList <String> listEleicao(String inicio, String fim) throws RemoteException;//pesquisa num intervalo de tempo, para pesquisar todas deixar a null
 	public ArrayList <String> listEleicao() throws RemoteException;
 	
@@ -161,7 +162,7 @@ public interface RMI_1 extends Remote{
 	//e bloquear o user para que não vote em mais nenhuma mesa
 	
 	public boolean desbloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, int id_elect) throws RemoteException;
-	public boolean bloquearVoto(String nomeMesaVoto,String passwordMesaVoto, int nCC, String passwordUser) throws RemoteException;
+	public boolean bloquearVoto(String nomeMesaVoto,String passwordMesaVoto, int nCC, int id_elect) throws RemoteException;
 
 	//verificar se o user está bloqueado a esta mesa de voto
 	//verificar se a password corresponde

@@ -431,6 +431,32 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		}
 	}
 	
+	public boolean removeEleicao(int id_eleicao) throws RemoteException {
+		try {
+			conn.setAutoCommit(false);
+			Statement st = conn.createStatement();
+			st.executeUpdate("Delete from eleicao where id = ("+id_eleicao+")");
+			conn.commit();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			return false;
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public ArrayList <String> listEleicao(String inicioE, String fimE) throws RemoteException {
 		ArrayList<String> eleicoes = new ArrayList<String>();
 		try {
@@ -1750,15 +1776,22 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 			throws RemoteException {
 		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {
 			comandoSql("update voto set blocked = 0 where id_pessoa = "+nCC+" and id_eleicao = "+id_elect+"");
+			return true;
+		} else {
+			return false;
 		}
 		// TODO Auto-generated method stub
-		return false;
 	}
 
-	public boolean bloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser)
+	public boolean bloquearVoto(String nomeMesaVoto, String passwordMesaVoto, int nCC, int id_elect)
 			throws RemoteException {
+		if (ligarServidor(nomeMesaVoto, passwordMesaVoto) != null) {
+			comandoSql("update voto set blocked = 1 where id_pessoa = "+nCC+" and id_eleicao = "+id_elect+"");
+			return true;
+		}else {
+			return false;
+		}
 		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public boolean votar(String nomeMesaVoto, String passwordMesaVoto, int nCC, String passwordUser, int voto)
