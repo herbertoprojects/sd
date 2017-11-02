@@ -130,6 +130,7 @@ public class getScanner {
 	public String mudaListaString(String texto, String lista) {
 		System.out.println("");
 		System.out.println(texto);
+		System.out.println(lista);
 		String [] textos = lista.split(";");
 		for(int i = 0;i<textos.length;i++) {
 			System.out.println((i+1)+"- "+textos[i]);

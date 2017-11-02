@@ -467,7 +467,7 @@ public class RMI extends UnicastRemoteObject implements RMI_1 {
 		try {
 			conn.setAutoCommit(false);
 			Statement st = conn.createStatement();
-			st.executeUpdate("Insert into eleicao values ('"+tipo+"', to_date('"+inicio+"','yyyy/mm/dd hh:mi'), to_date('"+fim+"','yyyy/mm/dd hh:mi'), '"+titulo+"', '"+descricao+"', '"+id+"')");
+			st.executeUpdate("Insert into eleicao values ('"+tipo+"', to_timestamp('"+inicio+"','yyyy/mm/dd hh24:mi'), to_timestamp('"+fim+"','yyyy/mm/dd hh24:mi'), '"+titulo+"', '"+descricao+"', '"+id+"')");
 			conn.commit();
 			return "type : create_election , ok : true";
 		} catch (SQLException e) {
