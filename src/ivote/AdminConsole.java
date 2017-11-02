@@ -825,7 +825,9 @@ public class AdminConsole extends UnicastRemoteObject{
 			else {listaTemp = listaTemp+";"+textoTemp;}
 		}
 		String facTemp = leTeclado.mudaListaString("Faculdade: ", listaTemp);
-		
+		if(facTemp == null) {
+			return false;
+		}
 		System.out.println(id+ " "+sigla+" "+nomeDepart+" "+Integer.parseInt(facTemp.split(" - ")[2]));
 		System.out.println("1- Confirmar");
 		System.out.println("0- Cancelar");
